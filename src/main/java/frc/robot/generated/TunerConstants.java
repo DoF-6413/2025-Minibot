@@ -29,9 +29,9 @@ public class TunerConstants {
   // output type specified by SwerveModuleConstants.SteerMotorClosedLoopOutput
   private static final Slot0Configs steerGains =
       new Slot0Configs()
-          .withKP(1)
+          .withKP(100)
           .withKI(0)
-          .withKD(0.0)
+          .withKD(0.5)
           .withKS(0.1)
           .withKV(1.91)
           .withKA(0)
@@ -142,11 +142,11 @@ public class TunerConstants {
   // Frame size
   private static final double trackWidth = 11.0;
   private static final double trackLength = 11.0;
-    //Turn IDs: 2,4,6,8
-    //Drive IDs: 1,3,5,7
+  // Turn IDs: 2,4,6,8
+  // Drive IDs: 1,3,5,7
   // Front Left
   private static final int kFrontLeftDriveMotorId = 1;
-  private static final int kFrontLeftSteerMotorId = 2; 
+  private static final int kFrontLeftSteerMotorId = 2;
   private static final int kFrontLeftEncoderId = 9;
   private static final Angle kFrontLeftEncoderOffset = Rotations.of(0.0);
   private static final boolean kFrontLeftSteerMotorInverted = true;
