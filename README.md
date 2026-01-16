@@ -3,10 +3,14 @@ Code to power the 2025 - 2026 offseason Minibot we are building.
 
 ## Code Etiquette
   USEFUL comments on EVERYTHING (Commands, Constants, etc)
-  Organize files properly in corresponding folders
-  Follow naming conventions (reference section below)
-  No hardcoded values, add them to Constants
+  
   **NEVER** merge code into the main or dev branches that you know does not work!
+  
+  Organize files properly in corresponding folders
+  
+  Follow naming conventions (reference section below)
+  
+  No hardcoded values, add them to Constants
   
   Create Issues on Github for EVERY branch
   - Add a description of what the branch should accomplish
@@ -14,7 +18,7 @@ Code to power the 2025 - 2026 offseason Minibot we are building.
   - 'Labels': used to organize issues, add as necessary
   - 'Development': link the branch to the issue
 
-  LOG OUT when finished for the day
+  LOG OUT when finished for the day if using an FSI computer
   - Use the **deactivate_ssh_key** script to remove your SSH key from active use.
   - Log out of Slack, GitHub, Google, and anything else
 
