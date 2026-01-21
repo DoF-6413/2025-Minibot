@@ -11,6 +11,8 @@ Code to power the 2025 - 2026 offseason Minibot we are building.
   Follow naming conventions (reference section below)
   
   No hardcoded values, add them to Constants
+  **NEVER** merge code into the main or dev branches that you know does not work!
+
   
   Create Issues on Github for EVERY branch
   - Add a description of what the branch should accomplish
@@ -45,7 +47,7 @@ main:
 dev:
 
 - **Make ALL branches off of *this* branch!!**
-- Code on dev should **always** be runnable.  
+- Code on dev should **always** be runnable.
 - Only merge to main after tested and cleaned
   - Explanatory comments
   - Code is fully functional
@@ -72,11 +74,11 @@ chore#[Issue#]-[name]:
 - Folder names are all lowercase and underscores instead of spaces
   - Ex: subsystems or commands\zero_commands
 - File and Java Class names are in Pascal Case: the first letter of every word is capitalized and no spaces between words.
-  - Ex: RobotContainer.java or public class RobotContainer 
+  - Ex: RobotContainer.java or public class RobotContainer
 - Constants are in all caps with underscores between words
-  - Ex: public static final ELEVATOR_MAX_CURRENT = 5.0 
+  - Ex: public static final ELEVATOR_MAX_CURRENT = 5.0
 - Functions and variables are in camelCase: lowercase first word, capitalize first letter of all subsequent words, no spaces between words
-  - Ex: public void updateModeChange() 
+  - Ex: public void updateModeChange()
 
 <hr/>
 
