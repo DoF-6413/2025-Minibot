@@ -1,0 +1,92 @@
+{
+  "Clients": {
+    "open": true
+  },
+  "Connections": {
+    "open": true
+  },
+  "Dashboard@1": {
+    "open": true
+  },
+  "NetworkTables Settings": {
+    "mode": "Client (NT4)",
+    "serverTeam": "842"
+  },
+  "Server": {
+    "open": true
+  },
+  "SmartDashboard-NT3@10.8.42.168:55252": {
+    "open": true
+  },
+  "outlineviewer@3": {
+    "Publishers": {
+      "open": true
+    },
+    "Subscribers": {
+      "open": true
+    },
+    "open": true
+  },
+  "retained": {
+    "SmartDashboard": {
+      "Auto Choices": {
+        "open": true
+      },
+      "open": true
+    }
+  },
+  "transitory": {
+    "AdvantageKit": {
+      "Drive": {
+        "Gyro": {
+          "open": true
+        },
+        "Module0": {
+          "open": true
+        }
+      },
+      "Vision": {
+        "Camera0": {
+          "open": true
+        },
+        "Camera1": {
+          "open": true
+        },
+        "open": true
+      },
+      "open": true
+    },
+    "CameraPublisher": {
+      "USB Camera 0": {
+        "open": true
+      }
+    },
+    "LiveWindow": {
+      ".status": {
+        "open": true
+      },
+      "open": true
+    },
+    "PathPlanner": {
+      "open": true
+    },
+    "Shuffleboard": {
+      "open": true
+    },
+    "SmartDashboard": {
+      "Auto Choices": {
+        "open": true
+      },
+      "open": true
+    },
+    "photonvision": {
+      "camera_0": {
+        "open": true
+      },
+      "camera_1": {
+        "open": true
+      },
+      "open": true
+    }
+  }
+}
