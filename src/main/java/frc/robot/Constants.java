@@ -37,7 +37,7 @@ public final class Constants {
   public static class VisionConstants {
     // AprilTag layout
     public static AprilTagFieldLayout aprilTagLayout =
-        AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
+        AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltWelded);
 
     // Camera names, must match names configured on coprocessor
     public static String camera0Name = "0_Arducam_OV9281";

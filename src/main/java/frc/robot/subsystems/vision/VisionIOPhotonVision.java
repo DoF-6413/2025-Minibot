@@ -49,6 +49,7 @@ public class VisionIOPhotonVision implements VisionIO {
                 Rotation2d.fromDegrees(result.getBestTarget().getYaw()),
                 Rotation2d.fromDegrees(result.getBestTarget().getPitch()));
       } else {
+        //note: if a camera doesn't see an april tag, it might trigger this "else" and be set to 0,0. sivan 1/29/26
         inputs.latestTargetObservation = new TargetObservation(Rotation2d.kZero, Rotation2d.kZero);
       }
 
