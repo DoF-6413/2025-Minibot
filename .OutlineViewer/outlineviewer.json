@@ -80,6 +80,9 @@
       "open": true
     },
     "photonvision": {
+      "1_Arducam_OV9281": {
+        "open": true
+      },
       "camera_0": {
         "open": true
       },
