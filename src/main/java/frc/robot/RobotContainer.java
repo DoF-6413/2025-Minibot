@@ -10,6 +10,10 @@ package frc.robot;
 import static frc.robot.Constants.VisionConstants.*;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.GoalEndState;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.path.Waypoint;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -30,6 +34,7 @@ import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
 import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
+import java.util.List;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -43,6 +48,17 @@ public class RobotContainer {
   private final Drive drive;
   private final Vision vision;
 
+  // On-the-fly paths
+  List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(
+        new Pose2d(0.388, 0.364, Rotation2d.fromDegrees(48.854)),
+        new Pose2d(2.072, 2.469, Rotation2d.fromDegrees(54.607)),
+        new Pose2d(3.260, 4.057, Rotation2d.fromDegrees(52.509))
+);
+
+  PathConstraints constraints = new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI);
+
+  PathPlannerPath hub =
+      new PathPlannerPath(waypoints, constraints, null, new GoalEndState(0, new Rotation2d(0)));
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
 
