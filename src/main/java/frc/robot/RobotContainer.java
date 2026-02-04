@@ -49,11 +49,11 @@ public class RobotContainer {
   private final Vision vision;
 
   // On-the-fly paths
-  List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(
-        new Pose2d(0.388, 0.364, Rotation2d.fromDegrees(48.854)),
-        new Pose2d(2.072, 2.469, Rotation2d.fromDegrees(54.607)),
-        new Pose2d(3.260, 4.057, Rotation2d.fromDegrees(52.509))
-);
+  List<Waypoint> waypoints =
+      PathPlannerPath.waypointsFromPoses(
+          new Pose2d(0.388, 0.364, Rotation2d.fromDegrees(48.854)),
+          new Pose2d(2.072, 2.469, Rotation2d.fromDegrees(54.607)),
+          new Pose2d(3.260, 4.057, Rotation2d.fromDegrees(52.509)));
 
   PathConstraints constraints = new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI);
 
