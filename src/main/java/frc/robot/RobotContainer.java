@@ -16,10 +16,13 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.path.Waypoint;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
@@ -35,6 +38,7 @@ import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
 import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
 import java.util.List;
+import java.util.Set;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -174,7 +178,7 @@ public class RobotContainer {
                 .ignoringDisable(true));
 
     // Path find to in front of hub when Y button pressed
-    controller.y().onTrue(Commands.runOnce(() -> getPathFindingCommand(), drive));
+    controller.y().onTrue(new DeferredCommand(() -> getPathFindingCommand(), Set.of(drive)));
   }
 
   /**
@@ -188,8 +192,12 @@ public class RobotContainer {
 
   /** Use this to get the on-the-fly path following command */
   public Command getPathFindingCommand() {
-    System.out.println("Attempting to path find");
-    return AutoBuilder.followPath(
-        new PathPlannerPath(waypoints, constraints, null, new GoalEndState(0.0, new Rotation2d())));
+    Pose2d targetPose;
+    if (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue) {
+      targetPose = new Pose2d(2.882, 4.009, new Rotation2d());
+    } else {
+      targetPose = new Pose2d(13.652, 4.009, new Rotation2d(Units.degreesToRadians(180)));
+    }
+    return AutoBuilder.pathfindToPose(targetPose, constraints, 0.0);
   }
 }
