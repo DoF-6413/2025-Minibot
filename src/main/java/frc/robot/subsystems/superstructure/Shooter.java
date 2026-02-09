@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.subsystems.shooter;
+package frc.robot.subsystems.superstructure;
 
 import edu.wpi.first.math.controller.BangBangController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -84,6 +84,15 @@ public class Shooter extends TimedRobot {
   /** Controls flywheel to a set speed (RPM) controlled by a joystick. */
   @Override
   public void teleopPeriodic() {
+    // Delegate to runVelocity so command-based code can call it as well.
+    runVelocity();
+  }
+
+  /**
+   * Run the flywheel closed-loop using the joystick axis as the target. This method is public so
+   * commands can call it (e.g. Commands.run(shooter::runVelocity)).
+   */
+  public void runVelocity() {
     // Scale setpoint value between 0 and maxSetpointValue
     double setpoint =
         Math.max(
