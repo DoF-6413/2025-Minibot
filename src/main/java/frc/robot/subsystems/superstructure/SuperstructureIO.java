@@ -1,5 +1,7 @@
 package frc.robot.subsystems.superstructure;
 
+import static frc.robot.subsystems.superstructure.SuperstructureConstants.intakeLauncherMotorReduction;
+
 import org.littletonrobotics.junction.AutoLog;
 
 public interface SuperstructureIO {
@@ -9,11 +11,15 @@ public interface SuperstructureIO {
     public double feederVelocityRadPerSec = 0.0;
     public double feederAppliedVolts = 0.0;
     public double feederCurrentAmps = 0.0;
+    public double feederRPM =
+        feederVelocityRadPerSec * 60 / (2 * Math.PI) * intakeLauncherMotorReduction;
 
     public double intakeLauncherPositionRad = 0.0;
     public double intakeLauncherVelocityRadPerSec = 0.0;
     public double intakeLauncherAppliedVolts = 0.0;
     public double intakeLauncherCurrentAmps = 0.0;
+    public double intakeLauncherRPM =
+        intakeLauncherVelocityRadPerSec * 60 / (2 * Math.PI) * intakeLauncherMotorReduction;
   }
 
   /** Update the set of loggable inputs. */

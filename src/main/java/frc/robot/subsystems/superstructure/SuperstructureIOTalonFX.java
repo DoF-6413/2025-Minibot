@@ -34,6 +34,7 @@ public class SuperstructureIOTalonFX implements SuperstructureIO {
   private final StatusSignal<AngularVelocity> feederVelocityRotPerSec = feeder.getVelocity();
   private final StatusSignal<Voltage> feederAppliedVolts = feeder.getMotorVoltage();
   private final StatusSignal<Current> feederCurrentAmps = feeder.getSupplyCurrent();
+  // private final StatusSignal<Double> feederRPM = feederVelocityRotPerSec *
 
   private final TalonFX intakeLauncher = new TalonFX(intakeLauncherCanId);
   private final StatusSignal<Angle> intakeLauncherPositionRot = intakeLauncher.getPosition();
