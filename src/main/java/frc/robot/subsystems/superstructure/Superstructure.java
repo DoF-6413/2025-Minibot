@@ -31,32 +31,6 @@ public class Superstructure extends SubsystemBase {
     Logger.processInputs("Superstructure", inputs);
   }
 
-  /** Set the rollers to the values for intaking. */
-  public Command intake() {
-    return runEnd(
-        () -> {
-          io.setFeederVoltage(intakingFeederVoltage);
-          io.setIntakeLauncherVoltage(intakingFeederVoltage);
-        },
-        () -> {
-          io.setFeederVoltage(0.0);
-          io.setIntakeLauncherVoltage(0.0);
-        });
-  }
-
-  /** Set the rollers to the values for ejecting fuel out the intake. */
-  public Command eject() {
-    return runEnd(
-        () -> {
-          io.setFeederVoltage(-intakingFeederVoltage);
-          io.setIntakeLauncherVoltage(-intakingFeederVoltage);
-        },
-        () -> {
-          io.setFeederVoltage(0.0);
-          io.setIntakeLauncherVoltage(0.0);
-        });
-  }
-
   /** Set the rollers to the values for launching. Spins up before feeding fuel. */
   public Command launch() {
     return run(() -> {
