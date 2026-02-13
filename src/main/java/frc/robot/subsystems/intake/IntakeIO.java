@@ -1,10 +1,10 @@
-package frc.robot.subsystems.superstructure;
+package frc.robot.subsystems.intake;
 
 import static frc.robot.subsystems.superstructure.SuperstructureConstants.*;
 
 import org.littletonrobotics.junction.AutoLog;
 
-public interface SuperstructureIO {
+public interface IntakeIO {
   @AutoLog
   public static class SuperstructureIOInputs {
     public double feederPositionRad = 0.0;

@@ -5,7 +5,7 @@
 // license that can be found in the LICENSE file
 // at the root directory of this project.
 
-package frc.robot.subsystems.superstructure;
+package frc.robot.subsystems.intake;
 
 import static frc.robot.subsystems.superstructure.SuperstructureConstants.*;
 
@@ -14,7 +14,7 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 
-public class SuperstructureIOSim implements SuperstructureIO {
+public class IntakeIOSim implements IntakeIO {
   private DCMotorSim feederSim =
       new DCMotorSim(
           LinearSystemId.createDCMotorSystem(DCMotor.getCIM(1), 0.004, feederMotorReduction),

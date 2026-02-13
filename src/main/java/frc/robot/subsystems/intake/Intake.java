@@ -5,45 +5,43 @@
 // license that can be found in the LICENSE file
 // at the root directory of this project.
 
-package frc.robot.subsystems.superstructure;
-
-import static frc.robot.subsystems.superstructure.SuperstructureConstants.*;
+package frc.robot.subsystems.intake;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
-public class Superstructure extends SubsystemBase {
-  private final SuperstructureIO io;
-  private final SuperstructureIOInputsAutoLogged inputs = new SuperstructureIOInputsAutoLogged();
+public class Intake extends SubsystemBase {
+  private final IntakeIO io;
+  private final IntakeIOInputsAutoLogged inputs = new IntakeIOInputsAutoLogged();
 
-  public Superstructure(SuperstructureIO io) {
+  public Intake(IntakeIO io) {
     this.io = io;
   }
 
   @Override
   public void periodic() {
     io.updateInputs(inputs);
-    Logger.processInputs("Superstructure", inputs);
+    Logger.processInputs("Intake", inputs);
   }
 
   /** Set the rollers to the values for launching. Spins up before feeding fuel. */
-  public Command launch() {
+  public Command intake() {
     return run(() -> {
-          io.setFeederVoltage(spinUpFeederVoltage);
-          io.setShooterVoltage(launchingShooterVoltage);
+          io.setIntakeVoltage(1.0);
+          io.setAgitatorVoltage(1.0);
         })
-        .withTimeout(spinUpSeconds)
+        .withTimeout(feedingSeconds)
         .andThen(
             run(
                 () -> {
-                  io.setFeederVoltage(launchingFeederVoltage);
-                  io.setShooterVoltage(launchingShooterVoltage);
+                  io.setFeederVoltage(feederVoltage);
+                  io.setAgitatorVoltage(agitatorVoltage);
                 }))
         .finallyDo(
             () -> {
               io.setFeederVoltage(0.0);
               io.setShooterVoltage(0.0);
-            });
+        });
   }
 }
