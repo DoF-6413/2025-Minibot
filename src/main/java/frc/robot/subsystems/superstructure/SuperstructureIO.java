@@ -11,7 +11,7 @@ public interface SuperstructureIO {
     public double feederVelocityRadPerSec = 0.0;
     public double feederAppliedVolts = 0.0;
     public double feederCurrentAmps = 0.0;
-    public double feederRPM = feederVelocityRadPerSec * 60 / (2 * Math.PI) * feederMotorReduction;
+    public double feederRPM = feederVelocityRadPerSec * 60 / (2 * Math.PI) * GEAR_RATIO;
 
     public double leftShooterPositionRad = 0.0;
     public double leftShooterVelocityRadPerSec = 0.0;

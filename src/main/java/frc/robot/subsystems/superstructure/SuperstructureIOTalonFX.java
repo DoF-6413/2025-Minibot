@@ -23,7 +23,7 @@ import edu.wpi.first.units.measure.*;
  * X44, or Kraken X60.
  */
 public class SuperstructureIOTalonFX implements SuperstructureIO {
-  private final TalonFX feeder = new TalonFX(feederCanId);
+  private final TalonFX feeder = new TalonFX(CAN_ID);
   private final StatusSignal<Angle> feederPositionRot = feeder.getPosition();
   private final StatusSignal<AngularVelocity> feederVelocityRotPerSec = feeder.getVelocity();
   private final StatusSignal<Voltage> feederAppliedVolts = feeder.getMotorVoltage();
@@ -39,7 +39,7 @@ public class SuperstructureIOTalonFX implements SuperstructureIO {
 
   public SuperstructureIOTalonFX() {
     var feederConfig = new TalonFXConfiguration();
-    feederConfig.CurrentLimits.SupplyCurrentLimit = feederCurrentLimit;
+    feederConfig.CurrentLimits.SupplyCurrentLimit = CURRENT_LIMIT;
     feederConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
     feederConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
     tryUntilOk(5, () -> feeder.getConfigurator().apply(feederConfig, 0.25));

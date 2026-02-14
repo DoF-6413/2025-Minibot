@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 public class IntakeIOSim implements IntakeIO {
   private DCMotorSim feederSim =
       new DCMotorSim(
-          LinearSystemId.createDCMotorSystem(DCMotor.getCIM(1), 0.004, feederMotorReduction),
+          LinearSystemId.createDCMotorSystem(DCMotor.getCIM(1), 0.004, GEAR_RATIO),
           DCMotor.getCIM(1));
   private DCMotorSim shooterSim =
       new DCMotorSim(

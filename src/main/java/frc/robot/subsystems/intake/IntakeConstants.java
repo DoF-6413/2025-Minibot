@@ -11,10 +11,6 @@ public class IntakeConstants {
   public static final int agitatorCanId = 23; //TODO: verify with A-bot
   public static final double agitatorMotorReduction = 1.0;
   public static final int agitatorCurrentLimit = 30;
-  
-  // public static final int pivotCanId = 24; //TODO: verify with A-bot
-  // public static final double pivotMotorReduction = 1.0;
-  // public static final int pivotCurrentLimit = 30;
 
   public static final int intakeCanId = 25; //TODO: verify with A-bot
   public static final double intakeMotorReduction = 1.0;
