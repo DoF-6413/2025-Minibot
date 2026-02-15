@@ -1,13 +1,13 @@
 package frc.robot.subsystems.pivot;
 
-import javax.print.event.PrintJobAttributeEvent;
-
+import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
@@ -20,12 +20,14 @@ public class PivotIOTalonFX implements PivotIO {
     private final TalonFX m_pivotTalonFX;
     private final TalonFXConfiguration m_motorConfig = new TalonFXConfiguration();
 
+    // Status signals
     private StatusSignal<Voltage> m_appliedVolts;
     private StatusSignal<Current> m_currentAmps;
     private StatusSignal<Temperature> m_tempCelsius;
     private StatusSignal<Angle> m_positionRot;
     private StatusSignal<AngularVelocity> m_velocityRotPerSec;
 
+    // Constructor
     public PivotIOTalonFX() {
         System.out.println("[INIT] PivotIOTalonFX");
 
@@ -43,6 +45,7 @@ public class PivotIOTalonFX implements PivotIO {
 
         m_pivotTalonFX.getConfigurator().apply(m_motorConfig);
 
+        // Update IOs
         m_positionRot = m_pivotTalonFX.getPosition();
         m_velocityRotPerSec = m_pivotTalonFX.getVelocity();
         m_appliedVolts = m_pivotTalonFX.getMotorVoltage();
@@ -57,7 +60,31 @@ public class PivotIOTalonFX implements PivotIO {
     }
 
     @Override
-    public void updateInputs(PivotIOInputs inputs) {}
+    public void updateInputs(PivotIOInputs inputs) {
+        inputs.isOK =
+          BaseStatusSignal.refreshAll(
+                  m_positionRot,
+                  m_velocityRotPerSec,
+                  m_appliedVolts,
+                  m_currentAmps,
+                  m_tempCelsius)
+              .isOK();
 
-    
+        inputs.appliedVoltage = m_appliedVolts.getValueAsDouble();
+        inputs.currentAmps = m_currentAmps.getValueAsDouble();
+        inputs.tempCelsius = m_tempCelsius.getValueAsDouble();
+        inputs.relativePosRad = m_positionRot.getValueAsDouble();
+        inputs.absPositionRad = m_positionRot.getValueAsDouble();
+        inputs.velocityRadPerSec = m_velocityRotPerSec.getValueAsDouble();
+    }
+
+    @Override
+    public void enableBrakeMode(boolean enable) {
+        m_pivotTalonFX.setNeutralMode(enable ? NeutralModeValue.Brake : NeutralModeValue.Coast);
+    }
+
+    @Override
+    public void setVoltage(double volts) {
+        m_pivotTalonFX.setVoltage(MathUtil.clamp(volts, -RobotStateConstants.MAX_VOLTAGE, RobotStateConstants.MAX_VOLTAGE));
+    }
 }

@@ -2,17 +2,18 @@ package frc.robot.subsystems.pivot;
 
 import edu.wpi.first.math.util.Units;
 
+//TODO: UPDATE ALL
 public class PivotConstants {
     /* CAN ID for Kraken */
-    public static final int CAN_ID = 24; //TODO: verify
+    public static final int CAN_ID = 24;
 
-    /* Geometry for calculations */
-    /* Gear reduction of 1:1 */
+    // Geometry for calculations
+    /* Gear reduction of 50:1 */
     public static final double GEAR_RATIO = 50.0/1.0;
     /* Length of Pivot in meters */
-    public static final double LENGTH_M = Units.inchesToMeters(0.0); //TODO: update
+    public static final double LENGTH_M = Units.inchesToMeters(0.0); 
     /* Weight of Pivot in kilograms */
-    public static final double WEIGHT_KG = Units.lbsToKilograms(0.0); //TODO: update
+    public static final double WEIGHT_KG = Units.lbsToKilograms(0.0);
 
     /* Sets inversion of motor to false, making CCW = positive direction */
     public static final boolean IS_INVERTED = false;
@@ -23,7 +24,6 @@ public class PivotConstants {
     public static final int CURRENT_LIMIT = 20;
 
     /* Motor Configs */
-
     /* Refreshes TalonFX signals 50 times a second (every 0.02 seconds) */
     public static final double UPDATE_FREQUENCY_HZ = 50;
 
@@ -35,7 +35,6 @@ public class PivotConstants {
     public static final double DEPLOY_ANGLE_RAD = Units.degreesToRadians(0.0); //TODO: measure
 
     /* PID & FF Constants */ 
-    //TODO: UPDATE ALL
     public static double kP = 0.0;
     public static double kI = 0.0;
     public static double kD = 0.0;
