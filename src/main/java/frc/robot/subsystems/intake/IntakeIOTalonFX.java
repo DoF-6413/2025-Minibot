@@ -23,7 +23,7 @@ import edu.wpi.first.units.measure.*;
  * X44, or Kraken X60.
  */
 public class IntakeIOTalonFX implements IntakeIO {
-  private final TalonFX intake = new TalonFX(intakeCanId);
+  private final TalonFX intake = new TalonFX(IntakeConstants.CAN_ID);
   private final StatusSignal<Angle> intakePositionRot = intake.getPosition();
   private final StatusSignal<AngularVelocity> intakeVelocityRotPerSec = intake.getVelocity();
   private final StatusSignal<Voltage> intakeAppliedVolts = intake.getMotorVoltage();

@@ -9,6 +9,8 @@ package frc.robot.subsystems.intake;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.pivot.PivotConstants;
+
 import org.littletonrobotics.junction.Logger;
 
 public class Intake extends SubsystemBase {
@@ -25,23 +27,11 @@ public class Intake extends SubsystemBase {
     Logger.processInputs("Intake", inputs);
   }
 
-  /** Set the rollers to the values for launching. Spins up before feeding fuel. */
-  public Command intake() {
-    return run(() -> {
-          io.setIntakeVoltage(1.0);
-          io.setAgitatorVoltage(1.0);
-        })
-        .withTimeout(feedingSeconds)
-        .andThen(
-            run(
-                () -> {
-                  io.setFeederVoltage(feederVoltage);
-                  io.setAgitatorVoltage(agitatorVoltage);
-                }))
-        .finallyDo(
-            () -> {
-              io.setFeederVoltage(0.0);
-              io.setShooterVoltage(0.0);
-        });
+  public void deployPivot() {
+    io.setPivotPosition(PivotConstants.DEPLOY_ANGLE_RAD);
+  }
+
+  public void stowPivot() {
+    io.setPivotPosition(PivotConstants.STOW_ANGLE_RAD);
   }
 }

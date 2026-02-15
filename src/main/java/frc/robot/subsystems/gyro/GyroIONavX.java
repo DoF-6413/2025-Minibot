@@ -5,12 +5,15 @@
 // license that can be found in the LICENSE file
 // at the root directory of this project.
 
-package frc.robot.subsystems.drive;
+package frc.robot.subsystems.gyro;
 
 import com.studica.frc.AHRS;
 import com.studica.frc.AHRS.NavXComType;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
+import frc.robot.subsystems.drivetrain.drive.Drive;
+import frc.robot.subsystems.drivetrain.drive.PhoenixOdometryThread;
+
 import java.util.Queue;
 
 /** IO implementation for NavX. */
