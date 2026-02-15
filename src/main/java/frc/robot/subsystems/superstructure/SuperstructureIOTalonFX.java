@@ -15,7 +15,6 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.*;
 import com.ctre.phoenix6.signals.*;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.*;
 
 /**
@@ -23,69 +22,70 @@ import edu.wpi.first.units.measure.*;
  * X44, or Kraken X60.
  */
 public class SuperstructureIOTalonFX implements SuperstructureIO {
-  private final TalonFX feeder = new TalonFX(CAN_ID);
-  private final StatusSignal<Angle> feederPositionRot = feeder.getPosition();
+  private final TalonFX feeder = new TalonFX(FeederConstants.CAN_ID);
   private final StatusSignal<AngularVelocity> feederVelocityRotPerSec = feeder.getVelocity();
   private final StatusSignal<Voltage> feederAppliedVolts = feeder.getMotorVoltage();
   private final StatusSignal<Current> feederCurrentAmps = feeder.getSupplyCurrent();
+  private final StatusSignal<Temperature> feederTempCelsius = feeder.getDeviceTemp();
 
-  private final TalonFX shooter = new TalonFX(shooterCanId);
-  private final StatusSignal<Angle> shooterPositionRot = shooter.getPosition();
+  private final TalonFX shooter = new TalonFX(ShooterConstants.CAN_ID);
   private final StatusSignal<AngularVelocity> shooterVelocityRotPerSec = shooter.getVelocity();
   private final StatusSignal<Voltage> shooterAppliedVolts = shooter.getMotorVoltage();
   private final StatusSignal<Current> shooterCurrentAmps = shooter.getSupplyCurrent();
+  private final StatusSignal<Temperature> shooterTempCelsius = shooter.getDeviceTemp();
 
   private final VoltageOut voltageRequest = new VoltageOut(0.0);
 
   public SuperstructureIOTalonFX() {
     var feederConfig = new TalonFXConfiguration();
-    feederConfig.CurrentLimits.SupplyCurrentLimit = CURRENT_LIMIT;
+    feederConfig.CurrentLimits.SupplyCurrentLimit = FeederConstants.CURRENT_LIMIT;
     feederConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
     feederConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
     tryUntilOk(5, () -> feeder.getConfigurator().apply(feederConfig, 0.25));
 
     var shooterConfig = new TalonFXConfiguration();
     shooterConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
-    shooterConfig.CurrentLimits.SupplyCurrentLimit = shooterCurrentLimit;
+    shooterConfig.CurrentLimits.SupplyCurrentLimit = ShooterConstants.CURRENT_LIMIT;
     shooterConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
     shooterConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
     tryUntilOk(5, () -> shooter.getConfigurator().apply(shooterConfig, 0.25));
 
     BaseStatusSignal.setUpdateFrequencyForAll(
         50.0,
-        feederPositionRot,
         feederVelocityRotPerSec,
         feederAppliedVolts,
         feederCurrentAmps,
-        shooterPositionRot,
+        feederTempCelsius,
         shooterVelocityRotPerSec,
         shooterAppliedVolts,
-        shooterCurrentAmps);
+        shooterCurrentAmps,
+        shooterTempCelsius);
     ParentDevice.optimizeBusUtilizationForAll(feeder, shooter);
   }
 
   @Override
   public void updateInputs(SuperstructureIOInputs inputs) {
     BaseStatusSignal.refreshAll(
-        feederPositionRot,
         feederVelocityRotPerSec,
         feederAppliedVolts,
         feederCurrentAmps,
-        shooterPositionRot,
+        feederTempCelsius,
         shooterVelocityRotPerSec,
         shooterAppliedVolts,
-        shooterCurrentAmps);
+        shooterCurrentAmps,
+        shooterTempCelsius);
 
-    inputs.feederPositionRad = Units.rotationsToRadians(feederPositionRot.getValueAsDouble());
-    inputs.feederVelocityRadPerSec =
-        Units.rotationsToRadians(feederVelocityRotPerSec.getValueAsDouble());
+    // Motor rotations -> feeder rotations * 60 sec/min
+    inputs.feederRPM = feederVelocityRotPerSec.getValueAsDouble() * 60 / FeederConstants.GEAR_RATIO;
     inputs.feederAppliedVolts = feederAppliedVolts.getValueAsDouble();
     inputs.feederCurrentAmps = feederCurrentAmps.getValueAsDouble();
-    
-    inputs.shooterPositionRad = Units.rotationsToRadians(shooterPositionRot.getValueAsDouble());
-    inputs.shooterVelocityRadPerSec = Units.rotationsToRadians(shooterVelocityRotPerSec.getValueAsDouble());
+    inputs.feederTempCelsius = feederTempCelsius.getValueAsDouble();
+
+    inputs.shooterRPM =
+        shooterVelocityRotPerSec.getValueAsDouble() * 60 / ShooterConstants.GEAR_RATIO;
     inputs.shooterAppliedVolts = shooterAppliedVolts.getValueAsDouble();
     inputs.shooterCurrentAmps = shooterCurrentAmps.getValueAsDouble();
+    inputs.shooterTempCelsius = shooterTempCelsius.getValueAsDouble();
   }
 
   @Override

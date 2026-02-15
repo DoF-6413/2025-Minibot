@@ -1,41 +1,39 @@
-// Copyright (c) 2021-2026 Littleton Robotics
-// http://github.com/Mechanical-Advantage
-//
-// Use of this source code is governed by a BSD
-// license that can be found in the LICENSE file
-// at the root directory of this project.
-
 package frc.robot.subsystems.intake;
 
+// TODO: UPDATE ALL
 public class IntakeConstants {
-  public static final int agitatorCanId = 23; //TODO: verify with A-bot
-  public static final double agitatorMotorReduction = 1.0;
-  public static final int agitatorCurrentLimit = 30;
+  /* CAN ID for Kraken */
+  public static final int CAN_ID = 25;
 
-  public static final int intakeCanId = 25; //TODO: verify with A-bot
-  public static final double intakeMotorReduction = 1.0;
-  public static final int intakeCurrentLimit = 30;
+  // Geometry for calculations
+  /* Gear reduction of 1:1 */
+  public static final double GEAR_RATIO = 1.0;
 
-  public static final double agitatorVoltage = 6.0;
-  // public static final double pivotVoltage = 6.0;
-  public static final double intakeVoltage = 3.0;
-  public static final double feedingSeconds = 1.0;
+  /* Sets inversion of motor to false, making CCW = positive direction */
+  public static final boolean IS_INVERTED = false;
+  public static final boolean IS_BRAKE_MODE_ENABLED = false;
 
-  // public static final double pivotIntakeVoltage = 3.0;
-  // public static final double pivotAgitatorVoltage = 6.0;
+  /* Current limiting */
+  public static final boolean ENABLE_CURRENT_LIMIT = true;
+  public static final int CURRENT_LIMIT = 30;
 
-  public static final double feedIntakeVoltage = 3.0;
-  public static final double feedingAgitatorVoltage = 6.0;
+  /* Motor Configs */
+  /* Refreshes TalonFX signals 50 times a second (every 0.02 seconds) */
+  public static final double UPDATE_FREQUENCY_HZ = 50;
 
-  // PID & FF constants
+  /* PID & FF Constants */
   public static double kP = 0.0;
   public static double kI = 0.0;
   public static double kD = 0.0;
 
-  public static double setpointRPM; //TODO: update
-  public static double toleranceRPM; //TODO: update
+  public static double TOLERANCE_RPM = 0.0;
 
   public static double kS = 0.0;
   public static double kV = 0.0;
   public static double kA = 0.0;
+
+  public static double MAX_VELOCITY_DEG_PER_S = 0.0;
+  public static double MAX_ACCELERATION_DEG_PER_S2 = 0.0;
+
+  public static double MOI_KG_M2 = 0.0;
 }

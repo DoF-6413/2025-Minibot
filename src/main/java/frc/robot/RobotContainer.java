@@ -16,14 +16,16 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.Constants.RobotStateConstants;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.Launch;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.drivetrain.drive.Drive;
 import frc.robot.subsystems.drivetrain.drive.ModuleIO;
 import frc.robot.subsystems.drivetrain.drive.ModuleIOSim;
 import frc.robot.subsystems.drivetrain.drive.ModuleIOTalonFX;
-import frc.robot.subsystems.gyro.GyroIO;
-import frc.robot.subsystems.gyro.GyroIOPigeon2;
+import frc.robot.subsystems.drivetrain.gyro.GyroIO;
+import frc.robot.subsystems.drivetrain.gyro.GyroIOPigeon2;
 import frc.robot.subsystems.superstructure.Superstructure;
 import frc.robot.subsystems.superstructure.SuperstructureIO;
 import frc.robot.subsystems.superstructure.SuperstructureIOSim;
@@ -49,7 +51,7 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    switch (Constants.currentMode) {
+    switch (RobotStateConstants.currentMode) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
         // ModuleIOTalonFX is intended for modules with TalonFX drive, TalonFX turn, and
@@ -152,7 +154,7 @@ public class RobotContainer {
                 .ignoringDisable(true));
 
     // Start shooting balls when the Right Bumper is held
-    controller.rightBumper().whileTrue(superstructure.launch());
+    controller.rightBumper().whileTrue(new Launch(superstructure));
   }
 
   /**

@@ -1,19 +1,13 @@
-package frc.robot.subsystems.pivot;
-
-import edu.wpi.first.math.util.Units;
+package frc.robot.subsystems.hopper;
 
 // TODO: UPDATE ALL
-public class PivotConstants {
+public class HopperConstants {
   /* CAN ID for Kraken */
-  public static final int CAN_ID = 24;
+  public static final int CAN_ID = 23;
 
   // Geometry for calculations
-  /* Gear reduction of 50:1 */
-  public static final double GEAR_RATIO = 50.0 / 1.0;
-  /* Length of Pivot in meters */
-  public static final double LENGTH_M = Units.inchesToMeters(0.0);
-  /* Weight of Pivot in kilograms */
-  public static final double WEIGHT_KG = Units.lbsToKilograms(0.0);
+  /* Gear reduction of 1:1 */
+  public static final double GEAR_RATIO = 1.0 / 1.0;
 
   /* Sets inversion of motor to false, making CCW = positive direction */
   public static final boolean IS_INVERTED = false;
@@ -21,18 +15,11 @@ public class PivotConstants {
 
   /* Current limiting */
   public static final boolean ENABLE_CURRENT_LIMIT = true;
-  public static final int CURRENT_LIMIT = 20;
+  public static final int CURRENT_LIMIT = 30;
 
   /* Motor Configs */
   /* Refreshes TalonFX signals 50 times a second (every 0.02 seconds) */
   public static final double UPDATE_FREQUENCY_HZ = 50;
-
-  /* Angle positions */
-  public static final double MIN_ANGLE_RAD = Units.degreesToRadians(0.0); // TODO: measure
-  public static final double MAX_ANGLE_RAD = Units.degreesToRadians(0.0); // TODO: measure
-
-  public static final double STOW_ANGLE_RAD = MIN_ANGLE_RAD + Units.degreesToRadians(5);
-  public static final double DEPLOY_ANGLE_RAD = Units.degreesToRadians(0.0); // TODO: measure
 
   /* PID & FF Constants */
   public static double kP = 0.0;

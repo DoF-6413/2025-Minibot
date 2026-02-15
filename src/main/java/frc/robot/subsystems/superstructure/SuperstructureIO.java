@@ -7,33 +7,26 @@ import org.littletonrobotics.junction.AutoLog;
 public interface SuperstructureIO {
   @AutoLog
   public static class SuperstructureIOInputs {
-    public double feederPositionRad = 0.0;
-    public double feederVelocityRadPerSec = 0.0;
     public double feederAppliedVolts = 0.0;
     public double feederCurrentAmps = 0.0;
-    public double feederRPM = feederVelocityRadPerSec * 60 / (2 * Math.PI) * GEAR_RATIO;
+    public double feederTempCelsius = 0.0;
+    public double feederRPM = 0.0;
 
-    public double leftShooterPositionRad = 0.0;
-    public double leftShooterVelocityRadPerSec = 0.0;
-    public double leftShooterAppliedVolts = 0.0;
-    public double leftShooterCurrentAmps = 0.0;
-    public double leftShooterRPM = leftShooterVelocityRadPerSec * 60 / (2 * Math.PI) * shooterMotorReduction;
-
-    public double midShooterPositionRad = 0.0;
-    public double midShooterVelocityRadPerSec = 0.0;
-    public double midShooterAppliedVolts = 0.0;
-    public double midShooterCurrentAmps = 0.0;
-    public double midShooterRPM = midShooterVelocityRadPerSec * 60 / (2 * Math.PI) * shooterMotorReduction;
-    
-    public double rightShooterPositionRad = 0.0;
-    public double rightShooterVelocityRadPerSec = 0.0;
-    public double rightShooterAppliedVolts = 0.0;
-    public double rightShooterCurrentAmps = 0.0;
-    public double rightShooterRPM = rightShooterVelocityRadPerSec * 60 / (2 * Math.PI) * shooterMotorReduction;
+    public double shooterAppliedVolts = 0.0;
+    public double shooterCurrentAmps = 0.0;
+    public double shooterTempCelsius = 0.0;
+    public double shooterRPM = 0.0;
   }
 
   /** Update the set of loggable inputs. */
   public default void updateInputs(SuperstructureIOInputs inputs) {}
+
+  /**
+   * Sets idle mode of motor
+   *
+   * @param enable {@code}true{@code} to enable brake mode, {@code}false{@code} for coast.
+   */
+  public default void setBrakeMode(boolean enable) {}
 
   /** Run the feeder at the specified voltage. */
   public default void setFeederVoltage(double volts) {}

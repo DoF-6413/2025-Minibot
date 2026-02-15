@@ -13,47 +13,29 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
+import frc.robot.Constants.RobotStateConstants;
 
 public class IntakeIOSim implements IntakeIO {
-  private DCMotorSim feederSim =
+  private DCMotorSim intakeSim =
       new DCMotorSim(
-          LinearSystemId.createDCMotorSystem(DCMotor.getCIM(1), 0.004, GEAR_RATIO),
-          DCMotor.getCIM(1));
-  private DCMotorSim shooterSim =
-      new DCMotorSim(
-          LinearSystemId.createDCMotorSystem(
-              DCMotor.getCIM(1), 0.004, shooterMotorReduction),
+          LinearSystemId.createDCMotorSystem(DCMotor.getCIM(1), 0.004, IntakeConstants.GEAR_RATIO),
           DCMotor.getCIM(1));
 
-  private double feederAppliedVolts = 0.0;
-  private double shooterAppliedVolts = 0.0;
+  private double intakeAppliedVolts = 0.0;
 
   @Override
-  public void updateInputs(SuperstructureIOInputs inputs) {
-    feederSim.setInputVoltage(feederAppliedVolts);
-    feederSim.update(0.02);
+  public void updateInputs(IntakeIOInputs inputs) {
+    intakeSim.setInputVoltage(intakeAppliedVolts);
+    intakeSim.update(RobotStateConstants.PERIODIC_LOOP_SEC);
 
-    shooterSim.setInputVoltage(shooterAppliedVolts);
-    shooterSim.update(0.02);
-
-    inputs.feederPositionRad = feederSim.getAngularPositionRad();
-    inputs.feederVelocityRadPerSec = feederSim.getAngularVelocityRadPerSec();
-    inputs.feederAppliedVolts = feederAppliedVolts;
-    inputs.feederCurrentAmps = feederSim.getCurrentDrawAmps();
-
-    inputs.leftShooterPositionRad = shooterSim.getAngularPositionRad();
-    inputs.leftShooterVelocityRadPerSec = shooterSim.getAngularVelocityRadPerSec();
-    inputs.leftShooterAppliedVolts = shooterAppliedVolts;
-    inputs.leftShooterCurrentAmps = shooterSim.getCurrentDrawAmps();
+    inputs.intakeRPM = intakeSim.getAngularPositionRad();
+    inputs.intakeAppliedVolts = intakeAppliedVolts;
+    inputs.intakeCurrentAmps = intakeSim.getCurrentDrawAmps();
+    inputs.intakeCurrentAmps = intakeSim.getCurrentDrawAmps();
   }
 
   @Override
-  public void setFeederVoltage(double volts) {
-    feederAppliedVolts = MathUtil.clamp(volts, -12.0, 12.0);
-  }
-
-  @Override
-  public void setShooterVoltage(double volts) {
-    shooterAppliedVolts = MathUtil.clamp(volts, -12.0, 12.0);
+  public void setVoltage(double volts) {
+    intakeAppliedVolts = MathUtil.clamp(volts, -12.0, 12.0);
   }
 }

@@ -17,6 +17,7 @@ import com.ctre.phoenix6.hardware.*;
 import com.ctre.phoenix6.signals.*;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.*;
+import frc.robot.subsystems.hopper.HopperConstants;
 
 /**
  * This superstructure implementation is for Talon FXs driving motors like the Falon 500, Kraken
@@ -29,17 +30,11 @@ public class IntakeIOTalonFX implements IntakeIO {
   private final StatusSignal<Voltage> intakeAppliedVolts = intake.getMotorVoltage();
   private final StatusSignal<Current> intakeCurrentAmps = intake.getSupplyCurrent();
 
-  private final TalonFX agitator = new TalonFX(agitatorCanId);
-  private final StatusSignal<Angle> agitatorPositionRot = agitator.getPosition();
-  private final StatusSignal<AngularVelocity> agitatorVelocityRotPerSec = agitator.getVelocity();
-  private final StatusSignal<Voltage> agitatorAppliedVolts = agitator.getMotorVoltage();
-  private final StatusSignal<Current> agitatorCurrentAmps = agitator.getSupplyCurrent();
-
   private final VoltageOut voltageRequest = new VoltageOut(0.0);
 
   public IntakeIOTalonFX() {
     var intakeConfig = new TalonFXConfiguration();
-    intakeConfig.CurrentLimits.SupplyCurrentLimit = IntakeConstants.intakeCurrentLimit;
+    intakeConfig.CurrentLimits.SupplyCurrentLimit = IntakeConstants.CURRENT_LIMIT;
     intakeConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
     intakeConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
     tryUntilOk(5, () -> intake.getConfigurator().apply(intakeConfig, 0.25));
@@ -81,9 +76,10 @@ public class IntakeIOTalonFX implements IntakeIO {
         Units.rotationsToRadians(intakeVelocityRotPerSec.getValueAsDouble());
     inputs.intakeAppliedVolts = intakeAppliedVolts.getValueAsDouble();
     inputs.intakeCurrentAmps = intakeCurrentAmps.getValueAsDouble();
-    
+
     inputs.agitatorPositionRad = Units.rotationsToRadians(agitatorPositionRot.getValueAsDouble());
-    inputs.agitatorVelocityRadPerSec = Units.rotationsToRadians(agitatorVelocityRotPerSec.getValueAsDouble());
+    inputs.agitatorVelocityRadPerSec =
+        Units.rotationsToRadians(agitatorVelocityRotPerSec.getValueAsDouble());
     inputs.agitatorAppliedVolts = agitatorAppliedVolts.getValueAsDouble();
     inputs.agitatorCurrentAmps = agitatorCurrentAmps.getValueAsDouble();
   }

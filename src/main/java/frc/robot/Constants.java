@@ -7,15 +7,11 @@
 
 package frc.robot;
 
-import java.util.Optional;
-
-import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
-
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import frc.robot.generated.TunerConstants;
 import edu.wpi.first.wpilibj.RobotBase;
+import java.util.Optional;
 
 /**
  * This class defines the runtime mode used by AdvantageKit. The mode is always "real" when running
@@ -60,6 +56,6 @@ public final class Constants {
     public static final double MAX_VOLTAGE = 12;
 
     /** Weight of robot with bumpers and battery */
-    public static final double ROBOT_WEIGHT_KG = Units.lbsToKilograms(0.0); //TODO: Update
+    public static final double ROBOT_WEIGHT_KG = Units.lbsToKilograms(0.0); // TODO: Update
   }
 }

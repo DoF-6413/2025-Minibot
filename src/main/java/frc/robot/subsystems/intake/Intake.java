@@ -7,31 +7,30 @@
 
 package frc.robot.subsystems.intake;
 
-import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.pivot.PivotConstants;
-
+import frc.robot.Constants.RobotStateConstants;
 import org.littletonrobotics.junction.Logger;
 
 public class Intake extends SubsystemBase {
-  private final IntakeIO io;
-  private final IntakeIOInputsAutoLogged inputs = new IntakeIOInputsAutoLogged();
+  private final IntakeIO m_io;
+  private final IntakeIOInputsAutoLogged m_inputs = new IntakeIOInputsAutoLogged();
 
   public Intake(IntakeIO io) {
-    this.io = io;
+    System.out.println("[INIT] Intake");
+
+    // Initialize the IO implementation
+    this.io = m_io;
   }
 
   @Override
   public void periodic() {
-    io.updateInputs(inputs);
-    Logger.processInputs("Intake", inputs);
+    m_io.updateInputs(m_inputs);
+    Logger.processInputs("Intake", m_inputs);
   }
 
-  public void deployPivot() {
-    io.setPivotPosition(PivotConstants.DEPLOY_ANGLE_RAD);
-  }
-
-  public void stowPivot() {
-    io.setPivotPosition(PivotConstants.STOW_ANGLE_RAD);
+  public void setVoltage(double volts) {
+    m_io.setVoltage(
+        MathUtil.clamp(volts, -RobotStateConstants.MAX_VOLTAGE, RobotStateConstants.MAX_VOLTAGE));
   }
 }
