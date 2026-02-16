@@ -1,13 +1,5 @@
-// Copyright (c) 2021-2026 Littleton Robotics
-// http://github.com/Mechanical-Advantage
-//
-// Use of this source code is governed by a BSD
-// license that can be found in the LICENSE file
-// at the root directory of this project.
-
 package frc.robot.subsystems.intake;
 
-import static frc.robot.subsystems.superstructure.SuperstructureConstants.*;
 import static frc.robot.util.PhoenixUtil.*;
 
 import com.ctre.phoenix6.*;
@@ -15,10 +7,8 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.*;
 import com.ctre.phoenix6.signals.*;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.*;
 import frc.robot.Constants.RobotStateConstants;
-import frc.robot.subsystems.hopper.HopperConstants;
 
 /**
  * This superstructure implementation is for Talon FXs driving motors like the Falon 500, Kraken

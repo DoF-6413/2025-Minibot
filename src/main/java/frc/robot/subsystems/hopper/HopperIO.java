@@ -13,7 +13,7 @@ public interface HopperIO {
   }
 
   /** Update the set of loggable inputs. */
-  public default void updateInputs(HopperIO inputs) {}
+  public default void updateInputs(HopperIOInputs inputs) {}
 
   /** Run the hopper motor at the specified voltage. */
   public default void setVoltage(double volts) {}
