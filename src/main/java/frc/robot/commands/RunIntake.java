@@ -14,12 +14,10 @@ public class RunIntake extends Command {
   public Pivot m_pivot;
   public Hopper m_hopper;
 
-  public RunIntake(Intake m_intake2, Pivot pivot, Hopper hopper) {
-    m_intake = m_intake2;
+  public RunIntake(Intake intake, Pivot pivot, Hopper hopper) {
+    m_intake = intake;
     m_pivot = pivot;
-    m_hopper = hopper;
-
-    addRequirements(m_intake2, pivot, hopper); // TODO: investigate?
+    addRequirements(intake, pivot, hopper); // TODO: investigate?
   }
 
   @Override
@@ -29,13 +27,11 @@ public class RunIntake extends Command {
 
   @Override
   public void execute() {
-    m_hopper.setVoltage(3.0);
-    m_intake.setVoltage(3.0);
+    m_intake.setVoltage(-8.0); // TODO: flip motor in settings
   }
 
   @Override
   public void end(boolean interrupted) {
-    m_hopper.setVoltage(0.0);
     m_intake.setVoltage(0.0);
   }
 }

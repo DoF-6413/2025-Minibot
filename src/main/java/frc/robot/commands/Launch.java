@@ -31,7 +31,10 @@ public class Launch extends Command {
   }
 
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    superstructure.setFeederVoltage(0.0);
+    superstructure.setShooterVoltage(0.0);
+  }
 
   // TODO: COMMANDS TO IMPLEMENT!
 

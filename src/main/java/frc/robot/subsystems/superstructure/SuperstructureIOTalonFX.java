@@ -40,14 +40,14 @@ public class SuperstructureIOTalonFX implements SuperstructureIO {
     var feederConfig = new TalonFXConfiguration();
     feederConfig.CurrentLimits.SupplyCurrentLimit = FeederConstants.CURRENT_LIMIT;
     feederConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-    feederConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+    feederConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
     tryUntilOk(5, () -> feeder.getConfigurator().apply(feederConfig, 0.25));
 
     var shooterConfig = new TalonFXConfiguration();
     shooterConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
     shooterConfig.CurrentLimits.SupplyCurrentLimit = ShooterConstants.CURRENT_LIMIT;
     shooterConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-    shooterConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+    shooterConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
     tryUntilOk(5, () -> shooter.getConfigurator().apply(shooterConfig, 0.25));
 
     BaseStatusSignal.setUpdateFrequencyForAll(

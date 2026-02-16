@@ -21,7 +21,7 @@ public class PivotConstants {
 
   /* Current limiting */
   public static final boolean ENABLE_CURRENT_LIMIT = true;
-  public static final int CURRENT_LIMIT = 20;
+  public static final int CURRENT_LIMIT = 10;
 
   /* Motor Configs */
   /* Refreshes TalonFX signals 50 times a second (every 0.02 seconds) */
