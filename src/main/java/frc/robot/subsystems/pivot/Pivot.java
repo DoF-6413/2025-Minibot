@@ -45,4 +45,8 @@ public class Pivot extends SubsystemBase {
   public void setVoltage(double volts) {
     m_io.setVoltage(volts);
   }
+
+  public void deployPivot() {
+    m_io.deployPivot();
+  }
 }

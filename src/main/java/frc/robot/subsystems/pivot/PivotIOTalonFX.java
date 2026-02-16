@@ -13,7 +13,6 @@ import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
 import frc.robot.Constants.RobotStateConstants;
-import frc.robot.subsystems.intake.IntakeConstants;
 
 public class PivotIOTalonFX implements PivotIO {
   // Motor, controller, configurator
@@ -90,5 +89,10 @@ public class PivotIOTalonFX implements PivotIO {
   public void setVoltage(double volts) {
     m_pivotTalonFX.setVoltage(
         MathUtil.clamp(volts, -RobotStateConstants.MAX_VOLTAGE, RobotStateConstants.MAX_VOLTAGE));
+  }
+
+  @Override
+  public void deployPivot() {
+    m_pivotTalonFX.setPosition(PivotConstants.DEPLOY_ANGLE_RAD);
   }
 }

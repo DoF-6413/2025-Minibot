@@ -18,7 +18,7 @@ public class IntakeIOTalonFX implements IntakeIO {
   // Motor, controller, configurator
   private final TalonFX m_intake = new TalonFX(IntakeConstants.CAN_ID);
   private final TalonFXConfiguration m_motorConfig = new TalonFXConfiguration();
-  
+
   // Status signals
   private final StatusSignal<AngularVelocity> intakeVelocityRotPerSec = m_intake.getVelocity();
   private final StatusSignal<Voltage> intakeAppliedVolts = m_intake.getMotorVoltage();
@@ -33,7 +33,8 @@ public class IntakeIOTalonFX implements IntakeIO {
 
     m_motorConfig.CurrentLimits.SupplyCurrentLimit = IntakeConstants.CURRENT_LIMIT;
     m_motorConfig.CurrentLimits.SupplyCurrentLimitEnable = IntakeConstants.ENABLE_CURRENT_LIMIT;
-    m_motorConfig.MotorOutput.NeutralMode = IntakeConstants.IS_BRAKE_MODE_ENABLED ? NeutralModeValue.Brake : NeutralModeValue.Coast;
+    m_motorConfig.MotorOutput.NeutralMode =
+        IntakeConstants.IS_BRAKE_MODE_ENABLED ? NeutralModeValue.Brake : NeutralModeValue.Coast;
     tryUntilOk(5, () -> m_intake.getConfigurator().apply(m_motorConfig, 0.25));
 
     BaseStatusSignal.setUpdateFrequencyForAll(
@@ -50,10 +51,7 @@ public class IntakeIOTalonFX implements IntakeIO {
   @Override
   public void updateInputs(IntakeIOInputs inputs) {
     BaseStatusSignal.refreshAll(
-        intakeVelocityRotPerSec,
-        intakeAppliedVolts,
-        intakeCurrentAmps,
-        intakeTempCelsius);
+        intakeVelocityRotPerSec, intakeAppliedVolts, intakeCurrentAmps, intakeTempCelsius);
 
     inputs.intakeRPM = intakeVelocityRotPerSec.getValueAsDouble() * 60 / IntakeConstants.GEAR_RATIO;
     inputs.intakeAppliedVolts = intakeAppliedVolts.getValueAsDouble();

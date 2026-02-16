@@ -7,12 +7,10 @@ import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
-import edu.wpi.first.wpilibj.RobotState;
 import frc.robot.Constants.RobotStateConstants;
 
 public class HopperIOTalonFX implements HopperIO {
@@ -32,9 +30,15 @@ public class HopperIOTalonFX implements HopperIO {
   public HopperIOTalonFX() {
     System.out.println("[INIT] HopperIOTalonFX");
 
-    m_motorConfig.MotorOutput.withInverted(HopperConstants.IS_INVERTED ? InvertedValue.CounterClockwise_Positive : InvertedValue.Clockwise_Positive)
-    .withNeutralMode(HopperConstants.IS_BRAKE_MODE_ENABLED ? NeutralModeValue.Brake : NeutralModeValue.Coast)
-    .withControlTimesyncFreqHz(HopperConstants.UPDATE_FREQUENCY_HZ);
+    m_motorConfig
+        .MotorOutput
+        .withInverted(
+            HopperConstants.IS_INVERTED
+                ? InvertedValue.CounterClockwise_Positive
+                : InvertedValue.Clockwise_Positive)
+        .withNeutralMode(
+            HopperConstants.IS_BRAKE_MODE_ENABLED ? NeutralModeValue.Brake : NeutralModeValue.Coast)
+        .withControlTimesyncFreqHz(HopperConstants.UPDATE_FREQUENCY_HZ);
 
     m_hopper.getConfigurator().apply(m_motorConfig);
 
@@ -46,11 +50,7 @@ public class HopperIOTalonFX implements HopperIO {
   @Override
   public void updateInputs(HopperIOInputs inputs) {
     BaseStatusSignal.refreshAll(
-        hopperVelocityRotPerSec,
-        hopperAppliedVolts,
-        hopperCurrentAmps,
-        hopperTempCelsius
-    );
+        hopperVelocityRotPerSec, hopperAppliedVolts, hopperCurrentAmps, hopperTempCelsius);
 
     inputs.hopperRPM = hopperVelocityRotPerSec.getValueAsDouble() * 60 / HopperConstants.GEAR_RATIO;
     inputs.hopperAppliedVolts = hopperAppliedVolts.getValueAsDouble();

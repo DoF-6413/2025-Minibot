@@ -35,4 +35,7 @@ public interface PivotIO {
    * @param volts A value between [-12, 12]
    */
   public default void setVoltage(double volts) {}
+
+  /** Deploys intake to ground position */
+  public default void deployPivot() {}
 }

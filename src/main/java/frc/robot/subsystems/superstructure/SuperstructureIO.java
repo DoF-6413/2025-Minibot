@@ -1,7 +1,5 @@
 package frc.robot.subsystems.superstructure;
 
-import static frc.robot.subsystems.superstructure.SuperstructureConstants.*;
-
 import org.littletonrobotics.junction.AutoLog;
 
 public interface SuperstructureIO {

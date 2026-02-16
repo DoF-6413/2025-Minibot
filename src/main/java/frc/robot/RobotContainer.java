@@ -13,9 +13,11 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.RobotStateConstants;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.Launch;
@@ -26,6 +28,16 @@ import frc.robot.subsystems.drivetrain.drive.ModuleIOSim;
 import frc.robot.subsystems.drivetrain.drive.ModuleIOTalonFX;
 import frc.robot.subsystems.drivetrain.gyro.GyroIO;
 import frc.robot.subsystems.drivetrain.gyro.GyroIOPigeon2;
+import frc.robot.subsystems.hopper.Hopper;
+import frc.robot.subsystems.hopper.HopperIO;
+import frc.robot.subsystems.hopper.HopperIOTalonFX;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.IntakeIO;
+import frc.robot.subsystems.intake.IntakeIOTalonFX;
+import frc.robot.subsystems.pivot.Pivot;
+import frc.robot.subsystems.pivot.PivotIO;
+import frc.robot.subsystems.pivot.PivotIOSim;
+import frc.robot.subsystems.pivot.PivotIOTalonFX;
 import frc.robot.subsystems.superstructure.Superstructure;
 import frc.robot.subsystems.superstructure.SuperstructureIO;
 import frc.robot.subsystems.superstructure.SuperstructureIOSim;
@@ -40,11 +52,15 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
  */
 public class RobotContainer {
   // Subsystems
-  private final Drive drive;
-  private final Superstructure superstructure;
+  private final Drive m_drive;
+  private final Hopper m_hopper;
+  private final Intake m_intake;
+  private final Pivot m_pivot;
+  private final Superstructure m_superstructure;
 
   // Controller
-  private final CommandXboxController controller = new CommandXboxController(0);
+  private final CommandXboxController driverController = new CommandXboxController(OperatorConstants.DRIVE_CONTROLLER);
+  private final CommandXboxController auxController = new CommandXboxController(OperatorConstants.AUX_CONTROLLER);
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
@@ -56,38 +72,49 @@ public class RobotContainer {
         // Real robot, instantiate hardware IO implementations
         // ModuleIOTalonFX is intended for modules with TalonFX drive, TalonFX turn, and
         // a CANcoder
-        drive =
+        m_drive =
             new Drive(
                 new GyroIOPigeon2(),
                 new ModuleIOTalonFX(TunerConstants.FrontLeft),
                 new ModuleIOTalonFX(TunerConstants.FrontRight),
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight));
-        superstructure = new Superstructure(new SuperstructureIOTalonFX());
+        m_intake = new Intake(new IntakeIOTalonFX());
+        m_hopper = new Hopper(new HopperIOTalonFX());
+        m_pivot = new Pivot(new PivotIOTalonFX());
+        m_superstructure = new Superstructure(new SuperstructureIOTalonFX());
         break;
 
       case SIM:
         // Sim robot, instantiate physics sim IO implementations
-        drive =
+        m_drive =
             new Drive(
                 new GyroIO() {},
                 new ModuleIOSim(TunerConstants.FrontLeft),
                 new ModuleIOSim(TunerConstants.FrontRight),
                 new ModuleIOSim(TunerConstants.BackLeft),
                 new ModuleIOSim(TunerConstants.BackRight));
-        superstructure = new Superstructure(new SuperstructureIOSim());
+
+        m_intake = new Intake(new IntakeIOTalonFX()); // TODO: implement sim
+        m_hopper = new Hopper(new HopperIOTalonFX()); // TODO: implement sim
+        m_pivot = new Pivot(new PivotIOSim());
+        m_superstructure = new Superstructure(new SuperstructureIOSim());
         break;
 
       default:
         // Replayed robot, disable IO implementations
-        drive =
+        m_drive =
             new Drive(
                 new GyroIO() {},
                 new ModuleIO() {},
                 new ModuleIO() {},
                 new ModuleIO() {},
                 new ModuleIO() {});
-        superstructure = new Superstructure(new SuperstructureIO() {});
+
+        m_intake = new Intake(new IntakeIO() {});
+        m_hopper = new Hopper(new HopperIO() {});
+        m_pivot = new Pivot(new PivotIO() {});
+        m_superstructure = new Superstructure(new SuperstructureIO() {});
         break;
     }
 
@@ -96,19 +123,19 @@ public class RobotContainer {
 
     // Set up SysId routines
     autoChooser.addOption(
-        "Drive Wheel Radius Characterization", DriveCommands.wheelRadiusCharacterization(drive));
+        "Drive Wheel Radius Characterization", DriveCommands.wheelRadiusCharacterization(m_drive));
     autoChooser.addOption(
-        "Drive Simple FF Characterization", DriveCommands.feedforwardCharacterization(drive));
+        "Drive Simple FF Characterization", DriveCommands.feedforwardCharacterization(m_drive));
     autoChooser.addOption(
         "Drive SysId (Quasistatic Forward)",
-        drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+        m_drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
     autoChooser.addOption(
         "Drive SysId (Quasistatic Reverse)",
-        drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+        m_drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
     autoChooser.addOption(
-        "Drive SysId (Dynamic Forward)", drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
+        "Drive SysId (Dynamic Forward)", m_drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
     autoChooser.addOption(
-        "Drive SysId (Dynamic Reverse)", drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+        "Drive SysId (Dynamic Reverse)", m_drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
     // Configure the button bindings
     configureButtonBindings();
@@ -121,48 +148,59 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    CommandScheduler.getInstance().getActiveButtonLoop().clear();
+
+    driverControllerBindings();
+    auxControllerBindings();
+  }
+
+  public void driverControllerBindings() {
     // Default command, normal field-relative drive
-    drive.setDefaultCommand(
+    m_drive.setDefaultCommand(
         DriveCommands.joystickDrive(
-            drive,
-            () -> -controller.getLeftY(),
-            () -> -controller.getLeftX(),
-            () -> -controller.getRightX()));
+            m_drive,
+            () -> -driverController.getLeftY(),
+            () -> -driverController.getLeftX(),
+            () -> -driverController.getRightX()));
 
     // Lock to 0° when A button is held
-    controller
+    driverController
         .a()
         .whileTrue(
             DriveCommands.joystickDriveAtAngle(
-                drive,
-                () -> -controller.getLeftY(),
-                () -> -controller.getLeftX(),
+                m_drive,
+                () -> -driverController.getLeftY(),
+                () -> -driverController.getLeftX(),
                 () -> Rotation2d.kZero));
 
     // Switch to X pattern when X button is pressed
-    controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
+    driverController.x().onTrue(Commands.runOnce(m_drive::stopWithX, m_drive));
 
     // Reset gyro to 0° when B button is pressed
-    controller
+    driverController
         .b()
         .onTrue(
             Commands.runOnce(
                     () ->
-                        drive.setPose(
-                            new Pose2d(drive.getPose().getTranslation(), Rotation2d.kZero)),
-                    drive)
+                        m_drive.setPose(
+                            new Pose2d(m_drive.getPose().getTranslation(), Rotation2d.kZero)),
+                    m_drive)
                 .ignoringDisable(true));
+    }
+            
+    public void auxControllerBindings() {
+        // Start shooting balls when the Right Bumper is held
+        auxController.rightBumper().whileTrue(new Launch(m_superstructure));
 
-    // Start shooting balls when the Right Bumper is held
-    controller.rightBumper().whileTrue(new Launch(superstructure));
-  }
+        auxController.leftBumper().whileTrue(new Intake(m_intake, m_hopper));
+    }
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  public Command getAutonomousCommand() {
-    return autoChooser.get();
-  }
+    /**
+     * Use this to pass the autonomous command to the main {@link Robot} class.
+     *
+     * @return the command to run in autonomous
+     */
+    public Command getAutonomousCommand() {
+        return autoChooser.get();
+    }
 }

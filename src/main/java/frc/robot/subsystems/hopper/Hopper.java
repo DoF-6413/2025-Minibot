@@ -4,14 +4,33 @@
 
 package frc.robot.subsystems.hopper;
 
+import org.littletonrobotics.junction.Logger;
+
+import edu.wpi.first.math.MathUsageId;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.RobotStateConstants;
 
 public class Hopper extends SubsystemBase {
+  private final HopperIO m_io;
+  private final HopperIOInputsAutoLogged m_inputs = new HopperIOInputsAutoLogged();
+
   /** Creates a new Hopper. */
-  public Hopper() {}
+  public Hopper(HopperIO io) {
+    System.out.println("[INIT] Hopper");
+
+    // Initialize the IO implementation
+    m_io = io;
+  }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    m_io.updateInputs(m_inputs);
+    Logger.processInputs("Hopper", m_inputs);
+  }
+
+  public void setVoltage(double volts) {
+    m_io.setVoltage(MathUtil.clamp(volts, -RobotStateConstants.MAX_VOLTAGE, RobotStateConstants.MAX_VOLTAGE));
   }
 }

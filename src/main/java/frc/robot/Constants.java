@@ -58,4 +58,9 @@ public final class Constants {
     /** Weight of robot with bumpers and battery */
     public static final double ROBOT_WEIGHT_KG = Units.lbsToKilograms(0.0); // TODO: Update
   }
+
+  public static class OperatorConstants {
+    public static int DRIVE_CONTROLLER = 0;
+    public static int AUX_CONTROLLER = 1;
+  }
 }
