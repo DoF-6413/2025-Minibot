@@ -13,10 +13,11 @@ import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
 import frc.robot.Constants.RobotStateConstants;
+import frc.robot.subsystems.intake.IntakeConstants;
 
 public class PivotIOTalonFX implements PivotIO {
   // Motor, controller, configurator
-  private final TalonFX m_pivotTalonFX;
+  private final TalonFX m_pivotTalonFX = new TalonFX(PivotConstants.CAN_ID);
   private final TalonFXConfiguration m_motorConfig = new TalonFXConfiguration();
 
   // Status signals
@@ -29,8 +30,6 @@ public class PivotIOTalonFX implements PivotIO {
   // Constructor
   public PivotIOTalonFX() {
     System.out.println("[INIT] PivotIOTalonFX");
-
-    m_pivotTalonFX = new TalonFX(PivotConstants.CAN_ID);
 
     m_motorConfig
         .MotorOutput

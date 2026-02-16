@@ -8,7 +8,9 @@ import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Voltage;
 
-public class HopperIOTalonFX extends HopperIO{
+public class HopperIOTalonFX implements HopperIO {
+
+    
   private final TalonFX hopper = new TalonFX(HopperConstants.CAN_ID);
   private final StatusSignal<AngularVelocity> hopperVelocityRotPerSec = hopper.getVelocity();
   private final StatusSignal<Voltage> hopperAppliedVolts = hopper.getMotorVoltage();

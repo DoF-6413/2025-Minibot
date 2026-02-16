@@ -20,7 +20,7 @@ public class Intake extends SubsystemBase {
     System.out.println("[INIT] Intake");
 
     // Initialize the IO implementation
-    this.io = m_io;
+    m_io = io;
   }
 
   @Override

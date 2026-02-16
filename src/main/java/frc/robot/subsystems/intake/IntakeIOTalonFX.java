@@ -17,6 +17,7 @@ import com.ctre.phoenix6.hardware.*;
 import com.ctre.phoenix6.signals.*;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.*;
+import frc.robot.Constants.RobotStateConstants;
 import frc.robot.subsystems.hopper.HopperConstants;
 
 /**
@@ -24,73 +25,54 @@ import frc.robot.subsystems.hopper.HopperConstants;
  * X44, or Kraken X60.
  */
 public class IntakeIOTalonFX implements IntakeIO {
-  private final TalonFX intake = new TalonFX(IntakeConstants.CAN_ID);
-  private final StatusSignal<Angle> intakePositionRot = intake.getPosition();
-  private final StatusSignal<AngularVelocity> intakeVelocityRotPerSec = intake.getVelocity();
-  private final StatusSignal<Voltage> intakeAppliedVolts = intake.getMotorVoltage();
-  private final StatusSignal<Current> intakeCurrentAmps = intake.getSupplyCurrent();
+  // Motor, controller, configurator
+  private final TalonFX m_intake = new TalonFX(IntakeConstants.CAN_ID);
+  private final TalonFXConfiguration m_motorConfig = new TalonFXConfiguration();
+  
+  // Status signals
+  private final StatusSignal<AngularVelocity> intakeVelocityRotPerSec = m_intake.getVelocity();
+  private final StatusSignal<Voltage> intakeAppliedVolts = m_intake.getMotorVoltage();
+  private final StatusSignal<Current> intakeCurrentAmps = m_intake.getSupplyCurrent();
+  private final StatusSignal<Temperature> intakeTempCelsius = m_intake.getDeviceTemp();
 
   private final VoltageOut voltageRequest = new VoltageOut(0.0);
 
+  // Constructor
   public IntakeIOTalonFX() {
-    var intakeConfig = new TalonFXConfiguration();
-    intakeConfig.CurrentLimits.SupplyCurrentLimit = IntakeConstants.CURRENT_LIMIT;
-    intakeConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-    intakeConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-    tryUntilOk(5, () -> intake.getConfigurator().apply(intakeConfig, 0.25));
+    System.out.println("[INIT] IntakeIOTalonFX");
 
-    var agitatorConfig = new TalonFXConfiguration();
-    agitatorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
-    agitatorConfig.CurrentLimits.SupplyCurrentLimit = IntakeConstants.agitatorCurrentLimit;
-    agitatorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-    agitatorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-    tryUntilOk(5, () -> agitator.getConfigurator().apply(agitatorConfig, 0.25));
+    m_motorConfig.CurrentLimits.SupplyCurrentLimit = IntakeConstants.CURRENT_LIMIT;
+    m_motorConfig.CurrentLimits.SupplyCurrentLimitEnable = IntakeConstants.ENABLE_CURRENT_LIMIT;
+    m_motorConfig.MotorOutput.NeutralMode = IntakeConstants.IS_BRAKE_MODE_ENABLED ? NeutralModeValue.Brake : NeutralModeValue.Coast;
+    tryUntilOk(5, () -> m_intake.getConfigurator().apply(m_motorConfig, 0.25));
 
     BaseStatusSignal.setUpdateFrequencyForAll(
-        50.0,
-        intakePositionRot,
+        IntakeConstants.UPDATE_FREQUENCY_HZ,
         intakeVelocityRotPerSec,
         intakeAppliedVolts,
         intakeCurrentAmps,
-        agitatorPositionRot,
-        agitatorVelocityRotPerSec,
-        agitatorAppliedVolts,
-        agitatorCurrentAmps);
-    ParentDevice.optimizeBusUtilizationForAll(intake, agitator);
+        intakeTempCelsius);
+
+    m_intake.optimizeBusUtilization();
+    m_intake.setExpiration(RobotStateConstants.CAN_CONFIG_TIMEOUT_SEC);
   }
 
   @Override
-  public void updateInputs(SuperstructureIOInputs inputs) {
+  public void updateInputs(IntakeIOInputs inputs) {
     BaseStatusSignal.refreshAll(
-        intakePositionRot,
         intakeVelocityRotPerSec,
         intakeAppliedVolts,
         intakeCurrentAmps,
-        agitatorPositionRot,
-        agitatorVelocityRotPerSec,
-        agitatorAppliedVolts,
-        agitatorCurrentAmps);
+        intakeTempCelsius);
 
-    inputs.intakePositionRad = Units.rotationsToRadians(intakePositionRot.getValueAsDouble());
-    inputs.intakeVelocityRadPerSec =
-        Units.rotationsToRadians(intakeVelocityRotPerSec.getValueAsDouble());
+    inputs.intakeRPM = intakeVelocityRotPerSec.getValueAsDouble() * 60 / IntakeConstants.GEAR_RATIO;
     inputs.intakeAppliedVolts = intakeAppliedVolts.getValueAsDouble();
     inputs.intakeCurrentAmps = intakeCurrentAmps.getValueAsDouble();
-
-    inputs.agitatorPositionRad = Units.rotationsToRadians(agitatorPositionRot.getValueAsDouble());
-    inputs.agitatorVelocityRadPerSec =
-        Units.rotationsToRadians(agitatorVelocityRotPerSec.getValueAsDouble());
-    inputs.agitatorAppliedVolts = agitatorAppliedVolts.getValueAsDouble();
-    inputs.agitatorCurrentAmps = agitatorCurrentAmps.getValueAsDouble();
+    inputs.intakeTempCelsius = intakeTempCelsius.getValueAsDouble();
   }
 
   @Override
-  public void setIntakeVoltage(double volts) {
-    intake.setControl(voltageRequest.withOutput(volts));
-  }
-
-  @Override
-  public void setAgitatorVoltage(double volts) {
-    agitator.setControl(voltageRequest.withOutput(volts));
+  public void setVoltage(double volts) {
+    m_intake.setControl(voltageRequest.withOutput(volts));
   }
 }
