@@ -21,6 +21,7 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.RobotStateConstants;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.Launch;
+import frc.robot.commands.RunIntake;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.drivetrain.drive.Drive;
 import frc.robot.subsystems.drivetrain.drive.ModuleIO;
@@ -59,8 +60,10 @@ public class RobotContainer {
   private final Superstructure m_superstructure;
 
   // Controller
-  private final CommandXboxController driverController = new CommandXboxController(OperatorConstants.DRIVE_CONTROLLER);
-  private final CommandXboxController auxController = new CommandXboxController(OperatorConstants.AUX_CONTROLLER);
+  private final CommandXboxController driverController =
+      new CommandXboxController(OperatorConstants.DRIVE_CONTROLLER);
+  private final CommandXboxController auxController =
+      new CommandXboxController(OperatorConstants.AUX_CONTROLLER);
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
@@ -186,21 +189,20 @@ public class RobotContainer {
                             new Pose2d(m_drive.getPose().getTranslation(), Rotation2d.kZero)),
                     m_drive)
                 .ignoringDisable(true));
-    }
-            
-    public void auxControllerBindings() {
-        // Start shooting balls when the Right Bumper is held
-        auxController.rightBumper().whileTrue(new Launch(m_superstructure));
+  }
 
-        auxController.leftBumper().whileTrue(new Intake(m_intake, m_hopper));
-    }
+  public void auxControllerBindings() {
+    // Start shooting balls when the Right Bumper is held
+    auxController.rightBumper().whileTrue(new Launch(m_superstructure));
+    auxController.leftBumper().whileTrue(new RunIntake(m_intake, m_pivot, m_hopper));
+  }
 
-    /**
-     * Use this to pass the autonomous command to the main {@link Robot} class.
-     *
-     * @return the command to run in autonomous
-     */
-    public Command getAutonomousCommand() {
-        return autoChooser.get();
-    }
+  /**
+   * Use this to pass the autonomous command to the main {@link Robot} class.
+   *
+   * @return the command to run in autonomous
+   */
+  public Command getAutonomousCommand() {
+    return autoChooser.get();
+  }
 }

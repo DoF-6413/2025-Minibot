@@ -34,6 +34,7 @@ public class IntakeIOSim implements IntakeIO {
 
   @Override
   public void setVoltage(double volts) {
-    intakeAppliedVolts = MathUtil.clamp(volts, -12.0, 12.0);
+    intakeAppliedVolts =
+        MathUtil.clamp(volts, -RobotStateConstants.MAX_VOLTAGE, RobotStateConstants.MAX_VOLTAGE);
   }
 }

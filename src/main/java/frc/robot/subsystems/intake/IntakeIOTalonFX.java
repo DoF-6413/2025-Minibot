@@ -17,7 +17,6 @@ import frc.robot.Constants.RobotStateConstants;
 public class IntakeIOTalonFX implements IntakeIO {
   // Motor, controller, configurator
   private final TalonFX m_intake = new TalonFX(IntakeConstants.CAN_ID);
-  private final TalonFXConfiguration m_motorConfig = new TalonFXConfiguration();
 
   // Status signals
   private final StatusSignal<AngularVelocity> intakeVelocityRotPerSec = m_intake.getVelocity();
@@ -25,17 +24,18 @@ public class IntakeIOTalonFX implements IntakeIO {
   private final StatusSignal<Current> intakeCurrentAmps = m_intake.getSupplyCurrent();
   private final StatusSignal<Temperature> intakeTempCelsius = m_intake.getDeviceTemp();
 
-  private final VoltageOut voltageRequest = new VoltageOut(0.0);
+  private VoltageOut voltageRequest = new VoltageOut(0.0);
 
   // Constructor
   public IntakeIOTalonFX() {
     System.out.println("[INIT] IntakeIOTalonFX");
 
-    m_motorConfig.CurrentLimits.SupplyCurrentLimit = IntakeConstants.CURRENT_LIMIT;
-    m_motorConfig.CurrentLimits.SupplyCurrentLimitEnable = IntakeConstants.ENABLE_CURRENT_LIMIT;
-    m_motorConfig.MotorOutput.NeutralMode =
+    var motorConfig = new TalonFXConfiguration();
+    motorConfig.CurrentLimits.SupplyCurrentLimit = IntakeConstants.CURRENT_LIMIT;
+    motorConfig.CurrentLimits.SupplyCurrentLimitEnable = IntakeConstants.ENABLE_CURRENT_LIMIT;
+    motorConfig.MotorOutput.NeutralMode =
         IntakeConstants.IS_BRAKE_MODE_ENABLED ? NeutralModeValue.Brake : NeutralModeValue.Coast;
-    tryUntilOk(5, () -> m_intake.getConfigurator().apply(m_motorConfig, 0.25));
+    tryUntilOk(5, () -> m_intake.getConfigurator().apply(motorConfig, 0.25));
 
     BaseStatusSignal.setUpdateFrequencyForAll(
         IntakeConstants.UPDATE_FREQUENCY_HZ,
@@ -44,6 +44,7 @@ public class IntakeIOTalonFX implements IntakeIO {
         intakeCurrentAmps,
         intakeTempCelsius);
 
+    m_intake.setPosition(0.0);
     m_intake.optimizeBusUtilization();
     m_intake.setExpiration(RobotStateConstants.CAN_CONFIG_TIMEOUT_SEC);
   }

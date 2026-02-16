@@ -42,6 +42,13 @@ public class HopperIOTalonFX implements HopperIO {
 
     m_hopper.getConfigurator().apply(m_motorConfig);
 
+    BaseStatusSignal.setUpdateFrequencyForAll(
+        HopperConstants.UPDATE_FREQUENCY_HZ,
+        hopperAppliedVolts,
+        hopperCurrentAmps,
+        hopperVelocityRotPerSec,
+        hopperTempCelsius);
+
     m_hopper.setPosition(0.0);
     m_hopper.optimizeBusUtilization();
     m_hopper.setExpiration(RobotStateConstants.CAN_CONFIG_TIMEOUT_SEC);

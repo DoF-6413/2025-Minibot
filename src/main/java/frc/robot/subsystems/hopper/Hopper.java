@@ -4,12 +4,10 @@
 
 package frc.robot.subsystems.hopper;
 
-import org.littletonrobotics.junction.Logger;
-
-import edu.wpi.first.math.MathUsageId;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.RobotStateConstants;
+import org.littletonrobotics.junction.Logger;
 
 public class Hopper extends SubsystemBase {
   private final HopperIO m_io;
@@ -31,6 +29,7 @@ public class Hopper extends SubsystemBase {
   }
 
   public void setVoltage(double volts) {
-    m_io.setVoltage(MathUtil.clamp(volts, -RobotStateConstants.MAX_VOLTAGE, RobotStateConstants.MAX_VOLTAGE));
+    m_io.setVoltage(
+        MathUtil.clamp(volts, -RobotStateConstants.MAX_VOLTAGE, RobotStateConstants.MAX_VOLTAGE));
   }
 }
