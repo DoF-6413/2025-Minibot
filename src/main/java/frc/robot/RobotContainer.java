@@ -20,8 +20,8 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.RobotStateConstants;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.Feed;
 import frc.robot.commands.Launch;
-import frc.robot.commands.RunHopper;
 import frc.robot.commands.RunIntake;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.drivetrain.drive.Drive;
@@ -195,8 +195,8 @@ public class RobotContainer {
   public void auxControllerBindings() {
     // Start shooting balls when the Right Bumper is held
     auxController.rightBumper().whileTrue(new Launch(m_superstructure));
-    auxController.leftBumper().whileTrue(new RunIntake(m_intake, m_pivot, m_hopper));
-    auxController.leftTrigger().whileTrue(new RunHopper(m_hopper));
+    auxController.leftBumper().whileTrue(new RunIntake(m_intake, m_pivot));
+    auxController.leftTrigger().whileTrue(new Feed(m_hopper, m_superstructure));
   }
 
   /**
