@@ -134,11 +134,14 @@ public class RobotContainer {
     autoChooser.addOption(
         "Drive SysId (Dynamic Reverse)", drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
-    //Set up on-the-fly paths
-    //On-the-fly path to front of hub
-    List<Waypoint> hubWaypoint = PathPlannerPath.waypointsFromPoses(new Pose2d(2.882, 4.009, new Rotation2d()));
-    PathConstraints constraints = PathConstraints.unlimitedConstraints(12.0);
-    PathPlannerPath poseToHub = new PathPlannerPath(hubWaypoint, constraints, null, new GoalEndState(0.0, new Rotation2d()));
+    // Set up on-the-fly paths
+    // On-the-fly path to front of hub
+    /**
+     * List<Waypoint> hubWaypoint = PathPlannerPath.waypointsFromPoses(new Pose2d(2.882, 4.009, new
+     * Rotation2d())); PathConstraints constraints = PathConstraints.unlimitedConstraints(12.0);
+     * PathPlannerPath poseToHub = new PathPlannerPath( hubWaypoint, constraints, null, new
+     * GoalEndState(0.0, new Rotation2d()));
+     */
 
     // Configure the button bindings
     configureButtonBindings();
@@ -174,7 +177,7 @@ public class RobotContainer {
                 .ignoringDisable(true));
 
     // Path find to in front of hub when Y button pressed
-    controller.y().whileTrue(Commands.startRun(AutoBuilder.followPath()));
+    // controller.y().whileTrue(Commands.startRun(AutoBuilder.followPath()));
   }
 
   /**
