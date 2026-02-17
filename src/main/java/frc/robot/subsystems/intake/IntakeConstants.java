@@ -17,6 +17,8 @@ public class IntakeConstants {
   public static final boolean ENABLE_CURRENT_LIMIT = true;
   public static final int CURRENT_LIMIT = 30;
 
+  public static final double INTAKING_VOLTAGE = 6.0;
+
   /* PID & FF Constants */
   public static double kP = 0.0;
   public static double kI = 0.0;

@@ -5,10 +5,10 @@
 // license that can be found in the LICENSE file
 // at the root directory of this project.
 
-package frc.robot.subsystems.feeder;
+package frc.robot.subsystems.column;
 
 // TODO: Verify all
-public final class FeederConstants {
+public final class ColumnConstants {
   public static final int CAN_ID = 21;
   public static final double GEAR_RATIO = 1.0;
   public static final int CURRENT_LIMIT = 30;

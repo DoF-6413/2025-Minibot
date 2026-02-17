@@ -24,19 +24,10 @@ public final class ShooterConstants {
   public static double kI = 0.0;
   public static double kD = 0.0;
 
-  public static double DEFAULT_RPM;
-  public static double TOLERANCE_RPM;
+  public static double DEFAULT_RPM = 3500;
+  public static double TOLERANCE_RPM = 300;
 
   public static double kS = 0.0;
   public static double kV = 0.0;
   public static double kA = 0.0;
-
-  public static final class FeederConstants {
-    public static final int CAN_ID = 21;
-    public static final double GEAR_RATIO = 1.0;
-    public static final int CURRENT_LIMIT = 30;
-
-    public static final double INTAKING_VOLTAGE = -12.0;
-    public static final double LAUNCHING_VOLTAGE = 9.0;
-  }
 }

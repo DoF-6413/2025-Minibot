@@ -24,16 +24,16 @@ import frc.robot.commands.Feed;
 import frc.robot.commands.Launch;
 import frc.robot.commands.RunIntake;
 import frc.robot.generated.TunerConstants;
+import frc.robot.subsystems.column.Column;
+import frc.robot.subsystems.column.ColumnIO;
+import frc.robot.subsystems.column.ColumnIOSim;
+import frc.robot.subsystems.column.ColumnIOTalonFX;
 import frc.robot.subsystems.drivetrain.drive.Drive;
 import frc.robot.subsystems.drivetrain.drive.ModuleIO;
 import frc.robot.subsystems.drivetrain.drive.ModuleIOSim;
 import frc.robot.subsystems.drivetrain.drive.ModuleIOTalonFX;
 import frc.robot.subsystems.drivetrain.gyro.GyroIO;
 import frc.robot.subsystems.drivetrain.gyro.GyroIOPigeon2;
-import frc.robot.subsystems.feeder.Feeder;
-import frc.robot.subsystems.feeder.FeederIO;
-import frc.robot.subsystems.feeder.FeederIOSim;
-import frc.robot.subsystems.feeder.FeederIOTalonFX;
 import frc.robot.subsystems.hopper.Hopper;
 import frc.robot.subsystems.hopper.HopperIO;
 import frc.robot.subsystems.hopper.HopperIOTalonFX;
@@ -59,7 +59,7 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 public class RobotContainer {
   // Subsystems
   private final Drive m_drive;
-  private final Feeder m_feeder;
+  private final Column m_column;
   private final Hopper m_hopper;
   private final Intake m_intake;
   private final Pivot m_pivot;
@@ -89,7 +89,7 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight));
 
-        m_feeder = new Feeder(new FeederIOTalonFX());
+        m_column = new Column(new ColumnIOTalonFX());
         m_hopper = new Hopper(new HopperIOTalonFX());
         m_intake = new Intake(new IntakeIOTalonFX());
         m_pivot = new Pivot(new PivotIOTalonFX());
@@ -106,7 +106,7 @@ public class RobotContainer {
                 new ModuleIOSim(TunerConstants.BackLeft),
                 new ModuleIOSim(TunerConstants.BackRight));
 
-        m_feeder = new Feeder(new FeederIOSim());
+        m_column = new Column(new ColumnIOSim());
         m_hopper = new Hopper(new HopperIOTalonFX()); // TODO: implement sim
         m_intake = new Intake(new IntakeIOTalonFX()); // TODO: implement sim
         m_pivot = new Pivot(new PivotIOSim());
@@ -123,7 +123,7 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {});
 
-        m_feeder = new Feeder(new FeederIO() {});
+        m_column = new Column(new ColumnIO() {});
         m_hopper = new Hopper(new HopperIO() {});
         m_intake = new Intake(new IntakeIO() {});
         m_pivot = new Pivot(new PivotIO() {});
@@ -203,9 +203,9 @@ public class RobotContainer {
 
   public void auxControllerBindings() {
     // Start shooting balls when the Right Bumper is held
-    auxController.rightBumper().whileTrue(new Launch(m_shooter, m_feeder, m_hopper));
+    auxController.rightBumper().whileTrue(new Launch(m_shooter, m_column, m_hopper));
     auxController.leftBumper().whileTrue(new RunIntake(m_intake, m_pivot));
-    auxController.leftTrigger().whileTrue(new Feed(m_hopper, m_feeder));
+    auxController.leftTrigger().whileTrue(new Feed(m_hopper, m_column));
   }
 
   /**

@@ -5,18 +5,18 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.feeder.Feeder;
+import frc.robot.subsystems.column.Column;
+import frc.robot.subsystems.column.ColumnConstants;
 import frc.robot.subsystems.hopper.Hopper;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterConstants;
-import frc.robot.subsystems.shooter.ShooterConstants.FeederConstants;
 
 public class Launch extends Command {
   public Shooter m_shooter;
-  public Feeder m_feeder;
+  public Column m_feeder;
   public Hopper m_hopper;
 
-  public Launch(Shooter shooter, Feeder feeder, Hopper hopper) {
+  public Launch(Shooter shooter, Column feeder, Hopper hopper) {
     m_shooter = shooter;
     m_feeder = feeder;
     m_hopper = hopper;
@@ -26,13 +26,13 @@ public class Launch extends Command {
 
   @Override
   public void initialize() {
-    m_feeder.setVoltage(FeederConstants.INTAKING_VOLTAGE);
+    m_feeder.setVoltage(ColumnConstants.INTAKING_VOLTAGE);
     m_shooter.setVoltage(ShooterConstants.LAUNCHING_VOLTAGE);
   }
 
   @Override
   public void execute() {
-    m_feeder.setVoltage(FeederConstants.LAUNCHING_VOLTAGE);
+    m_feeder.setVoltage(ColumnConstants.LAUNCHING_VOLTAGE);
     m_shooter.setVoltage(ShooterConstants.LAUNCHING_VOLTAGE);
   }
 
@@ -48,19 +48,6 @@ public class Launch extends Command {
   // public Command intake(Intake m_intake) {
   //   return Commands.run(() -> {m_intake.deployPivot();})
   //       .alongWith(() -> {m_superstructure.setShooterVoltage(0.0);
-  //       });
-  // }
-
-  // /** Set the rollers to the values for ejecting fuel out the intake. */
-  // public Command eject() {
-  //   return runEnd(
-  //       () -> {
-  //         io.setFeederVoltage(-intakingFeederVoltage);
-  //         io.setIntakeLauncherVoltage(-intakingFeederVoltage);
-  //       },
-  //       () -> {
-  //         io.setFeederVoltage(0.0);
-  //         io.setIntakeLauncherVoltage(0.0);
   //       });
   // }
 
