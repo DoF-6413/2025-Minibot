@@ -40,12 +40,12 @@ public class Shooter extends SubsystemBase {
     // Puts adjustable PID and FF values onto the SmartDashboard for testing mode
     SmartDashboard.putBoolean("Tuning/Shooter/EnableTuning", false);
     SmartDashboard.putNumber("Tuning/Shooter/Setpoint", ShooterConstants.SETPOINT_RPM);
-    SmartDashboard.putNumber("Tuning/Shooter/kP", ShooterConstants.kP);
-    SmartDashboard.putNumber("Tuning/Shooter/kI", ShooterConstants.kI);
-    SmartDashboard.putNumber("Tuning/Shooter/kD", ShooterConstants.kD);
-    SmartDashboard.putNumber("Tuning/Shooter/kS", ShooterConstants.kS);
-    SmartDashboard.putNumber("Tuning/Shooter/kV", ShooterConstants.kV);
-    SmartDashboard.putNumber("Tuning/Shooter/kA", ShooterConstants.kA);
+    SmartDashboard.putNumber("Tuning/Shooter/PID/kP", ShooterConstants.kP);
+    SmartDashboard.putNumber("Tuning/Shooter/PID/kI", ShooterConstants.kI);
+    SmartDashboard.putNumber("Tuning/Shooter/PID/kD", ShooterConstants.kD);
+    SmartDashboard.putNumber("Tuning/Shooter/FF/kS", ShooterConstants.kS);
+    SmartDashboard.putNumber("Tuning/Shooter/FF/kV", ShooterConstants.kV);
+    SmartDashboard.putNumber("Tuning/Shooter/FF/kA", ShooterConstants.kA);
   }
 
   @Override
@@ -65,8 +65,8 @@ public class Shooter extends SubsystemBase {
       updatePID();
       updateFF();
 
-      SmartDashboard.putNumber("Error RPM", m_PIDController.getPositionError());
-      SmartDashboard.putBoolean("AtSetpoint", atSetpoint());
+      SmartDashboard.putNumber("Tuning/Shooter/Error RPM", m_PIDController.getPositionError());
+      SmartDashboard.putBoolean("Tuning/Shooter/AtSetpoint", atSetpoint());
     }
   }
 
@@ -107,15 +107,17 @@ public class Shooter extends SubsystemBase {
     // If any value on SmartDashboard changes, update the gains
     if (ShooterConstants.SETPOINT_RPM
             != SmartDashboard.getNumber("Tuning/Shooter/Setpoint", ShooterConstants.SETPOINT_RPM)
-        || ShooterConstants.kP != SmartDashboard.getNumber("Tuning/Shooter/kP", ShooterConstants.kP)
-        || ShooterConstants.kI != SmartDashboard.getNumber("Tuning/Shooter/kI", ShooterConstants.kI)
+        || ShooterConstants.kP
+            != SmartDashboard.getNumber("Tuning/Shooter/PID/kP", ShooterConstants.kP)
+        || ShooterConstants.kI
+            != SmartDashboard.getNumber("Tuning/Shooter/PID/kI", ShooterConstants.kI)
         || ShooterConstants.kD
-            != SmartDashboard.getNumber("Tuning/Shooter/kD", ShooterConstants.kD)) {
+            != SmartDashboard.getNumber("Tuning/Shooter/PID/kD", ShooterConstants.kD)) {
       ShooterConstants.SETPOINT_RPM =
           SmartDashboard.getNumber("Tuning/Shooter/Setpoint", ShooterConstants.SETPOINT_RPM);
-      ShooterConstants.kP = SmartDashboard.getNumber("Tuning/Shooter/kP", ShooterConstants.kP);
-      ShooterConstants.kI = SmartDashboard.getNumber("Tuning/Shooter/kI", ShooterConstants.kI);
-      ShooterConstants.kD = SmartDashboard.getNumber("Tuning/Shooter/kD", ShooterConstants.kD);
+      ShooterConstants.kP = SmartDashboard.getNumber("Tuning/Shooter/PID/kP", ShooterConstants.kP);
+      ShooterConstants.kI = SmartDashboard.getNumber("Tuning/Shooter/PID/kI", ShooterConstants.kI);
+      ShooterConstants.kD = SmartDashboard.getNumber("Tuning/Shooter/PID/kD", ShooterConstants.kD);
       // Sets the new gains
       m_PIDController.setSetpoint(m_setpoint);
       setPID(ShooterConstants.kP, ShooterConstants.kI, ShooterConstants.kD);
@@ -125,13 +127,14 @@ public class Shooter extends SubsystemBase {
   /** Update FF gains for the Shooter motor from SmartDashboard inputs. */
   private void updateFF() {
     // If any value on SmartDashboard changes, update the gains
-    if (ShooterConstants.kS != SmartDashboard.getNumber("Tuning/Shooter/kS", ShooterConstants.kS)
-        || ShooterConstants.kV != SmartDashboard.getNumber("Tuning/Shooter/kV", ShooterConstants.kV)
+    if (ShooterConstants.kS != SmartDashboard.getNumber("Tuning/Shooter/FF/kS", ShooterConstants.kS)
+        || ShooterConstants.kV
+            != SmartDashboard.getNumber("Tuning/Shooter/FF/kV", ShooterConstants.kV)
         || ShooterConstants.kA
-            != SmartDashboard.getNumber("Tuning/Shooter/kA", ShooterConstants.kA)) {
-      ShooterConstants.kS = SmartDashboard.getNumber("Tuning/Shooter/kS", ShooterConstants.kS);
-      ShooterConstants.kV = SmartDashboard.getNumber("Tuning/Shooter/kV", ShooterConstants.kV);
-      ShooterConstants.kA = SmartDashboard.getNumber("Tuning/Shooter/kA", ShooterConstants.kA);
+            != SmartDashboard.getNumber("Tuning/Shooter/FF/kA", ShooterConstants.kA)) {
+      ShooterConstants.kS = SmartDashboard.getNumber("Tuning/Shooter/FF/kS", ShooterConstants.kS);
+      ShooterConstants.kV = SmartDashboard.getNumber("Tuning/Shooter/FF/kV", ShooterConstants.kV);
+      ShooterConstants.kA = SmartDashboard.getNumber("Tuning/Shooter/FF/kA", ShooterConstants.kA);
       // Sets the new gains
       setFF(ShooterConstants.kS, ShooterConstants.kV, ShooterConstants.kA);
     }

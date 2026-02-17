@@ -22,9 +22,10 @@ public final class ShooterConstants {
   // PID
   public static double kP = 0.0; // 0.05
   public static double kI = 0.0;
-  public static double kD = 0.0; // 0.03
+  public static double kD = 0.0;
 
-  public static double SETPOINT_RPM = 2500;
+  public static double SETPOINT_RPM =
+      2500; // 3500 is about max & a bit high for just one motor (2-16-26)
   public static double TOLERANCE_RPM = 300;
 
   // FF returns Voltage per RPM
