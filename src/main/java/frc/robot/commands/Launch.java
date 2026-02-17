@@ -4,7 +4,10 @@
 
 package frc.robot.commands;
 
+import static frc.robot.subsystems.shooter.ShooterConstants.SPINUP_SEC;
+
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.column.Column;
 import frc.robot.subsystems.column.ColumnConstants;
 import frc.robot.subsystems.hopper.Hopper;
@@ -32,6 +35,7 @@ public class Launch extends Command {
 
   @Override
   public void execute() {
+    new WaitCommand(SPINUP_SEC);
     m_feeder.setVoltage(ColumnConstants.LAUNCHING_VOLTAGE);
     m_shooter.setVoltage(ShooterConstants.LAUNCHING_VOLTAGE);
   }

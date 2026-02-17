@@ -17,17 +17,15 @@ public final class ShooterConstants {
 
   public static final double INTAKING_VOLTAGE = 0.0;
   public static final double LAUNCHING_VOLTAGE =
-      -6.5; // 8 hits the ceiling, this static voltage was good for 132"
+      6.5; // 8 hits the ceiling, this static voltage was good for 132"
 
   // PID
-  public static double kP = 0.0;
+  public static double kP = 0.0; // 0.05
   public static double kI = 0.0;
-  public static double kD = 0.0;
+  public static double kD = 0.0; // 0.03
 
-  public static double DEFAULT_RPM = 3500;
+  public static double SETPOINT_RPM = 2500;
   public static double TOLERANCE_RPM = 300;
-
-  public static double MAX_RPM = 10000;
 
   // FF returns Voltage per RPM
   public static double kS = 0.0;

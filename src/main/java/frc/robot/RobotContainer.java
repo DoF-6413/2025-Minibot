@@ -203,9 +203,10 @@ public class RobotContainer {
 
   public void auxControllerBindings() {
     // Start shooting balls when the Right Bumper is held
-    auxController.rightBumper().whileTrue(new Launch(m_shooter, m_column, m_hopper));
     auxController.leftBumper().whileTrue(new RunIntake(m_intake, m_pivot));
-    auxController.leftTrigger().whileTrue(new Feed(m_hopper, m_column));
+
+    auxController.rightBumper().whileTrue(new Launch(m_shooter, m_column, m_hopper));
+    auxController.rightTrigger().whileTrue(new Feed(m_hopper, m_column));
   }
 
   /**

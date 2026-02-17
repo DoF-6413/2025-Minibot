@@ -12,12 +12,12 @@ import frc.robot.subsystems.hopper.HopperConstants;
 
 public class Feed extends Command {
   public Hopper m_hopper;
-  public Column m_feeder;
+  public Column m_column;
 
-  public Feed(Hopper hopper, Column feeder) {
+  public Feed(Hopper hopper, Column column) {
     m_hopper = hopper;
-    m_feeder = feeder;
-    addRequirements(hopper, feeder);
+    m_column = column;
+    addRequirements(hopper, column);
   }
 
   @Override
@@ -26,12 +26,12 @@ public class Feed extends Command {
   @Override
   public void execute() {
     m_hopper.setVoltage(HopperConstants.LAUNCHING_VOLTAGE);
-    m_feeder.setVoltage(ColumnConstants.LAUNCHING_VOLTAGE);
+    m_column.setVoltage(ColumnConstants.LAUNCHING_VOLTAGE); // TODO: fix in init
   }
 
   @Override
   public void end(boolean interrupted) {
     m_hopper.setVoltage(0.0);
-    m_feeder.setVoltage(0);
+    m_column.setVoltage(0);
   }
 }

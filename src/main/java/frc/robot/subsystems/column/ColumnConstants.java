@@ -13,6 +13,9 @@ public final class ColumnConstants {
   public static final double GEAR_RATIO = 1.0;
   public static final int CURRENT_LIMIT = 30;
 
+  public static final boolean IS_INVERTED = false; // false = CCW
+  public static final boolean ENABLE_CURRENT_LIMIT = false; // false = CCW
+
   public static final double INTAKING_VOLTAGE = -12.0;
-  public static final double LAUNCHING_VOLTAGE = 9.0;
+  public static final double LAUNCHING_VOLTAGE = -9.0;
 }

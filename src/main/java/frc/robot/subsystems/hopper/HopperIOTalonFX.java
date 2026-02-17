@@ -34,8 +34,8 @@ public class HopperIOTalonFX implements HopperIO {
         .MotorOutput
         .withInverted(
             HopperConstants.IS_INVERTED
-                ? InvertedValue.CounterClockwise_Positive
-                : InvertedValue.Clockwise_Positive)
+                ? InvertedValue.Clockwise_Positive
+                : InvertedValue.CounterClockwise_Positive)
         .withNeutralMode(
             HopperConstants.IS_BRAKE_MODE_ENABLED ? NeutralModeValue.Brake : NeutralModeValue.Coast)
         .withControlTimesyncFreqHz(RobotStateConstants.UPDATE_FREQUENCY_HZ);

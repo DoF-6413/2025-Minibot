@@ -22,7 +22,7 @@ public class Shooter extends SubsystemBase {
   // Controllers
   private final PIDController m_PIDController;
   private final SimpleMotorFeedforward m_FFController;
-  private double m_setpoint = 0.0;
+  private double m_setpoint = ShooterConstants.SETPOINT_RPM;
   private boolean m_enablePID = true;
   private boolean m_enableTesting = true;
 
@@ -39,6 +39,7 @@ public class Shooter extends SubsystemBase {
 
     // Puts adjustable PID and FF values onto the SmartDashboard for testing mode
     SmartDashboard.putBoolean("Tuning/Shooter/EnableTuning", false);
+    SmartDashboard.putNumber("Tuning/Shooter/Setpoint", ShooterConstants.SETPOINT_RPM);
     SmartDashboard.putNumber("Tuning/Shooter/kP", ShooterConstants.kP);
     SmartDashboard.putNumber("Tuning/Shooter/kI", ShooterConstants.kI);
     SmartDashboard.putNumber("Tuning/Shooter/kD", ShooterConstants.kD);
@@ -57,8 +58,6 @@ public class Shooter extends SubsystemBase {
       setVoltage(
           m_PIDController.calculate(m_inputs.shooterRPM)
               + (m_FFController.calculate(m_inputs.shooterRPM) / RobotStateConstants.MAX_VOLTAGE));
-
-      // FF returns a value in Volts/RPM
     }
 
     // Enables test values along with printing other useful measurements for testing
@@ -106,14 +105,19 @@ public class Shooter extends SubsystemBase {
   /** Update PID gains for the Shooter motor from SmartDashboard inputs. */
   private void updatePID() {
     // If any value on SmartDashboard changes, update the gains
-    if (ShooterConstants.kP != SmartDashboard.getNumber("Tuning/Shooter/kP", ShooterConstants.kP)
+    if (ShooterConstants.SETPOINT_RPM
+            != SmartDashboard.getNumber("Tuning/Shooter/Setpoint", ShooterConstants.SETPOINT_RPM)
+        || ShooterConstants.kP != SmartDashboard.getNumber("Tuning/Shooter/kP", ShooterConstants.kP)
         || ShooterConstants.kI != SmartDashboard.getNumber("Tuning/Shooter/kI", ShooterConstants.kI)
         || ShooterConstants.kD
             != SmartDashboard.getNumber("Tuning/Shooter/kD", ShooterConstants.kD)) {
+      ShooterConstants.SETPOINT_RPM =
+          SmartDashboard.getNumber("Tuning/Shooter/Setpoint", ShooterConstants.SETPOINT_RPM);
       ShooterConstants.kP = SmartDashboard.getNumber("Tuning/Shooter/kP", ShooterConstants.kP);
       ShooterConstants.kI = SmartDashboard.getNumber("Tuning/Shooter/kI", ShooterConstants.kI);
       ShooterConstants.kD = SmartDashboard.getNumber("Tuning/Shooter/kD", ShooterConstants.kD);
       // Sets the new gains
+      m_PIDController.setSetpoint(m_setpoint);
       setPID(ShooterConstants.kP, ShooterConstants.kI, ShooterConstants.kD);
     }
   }
