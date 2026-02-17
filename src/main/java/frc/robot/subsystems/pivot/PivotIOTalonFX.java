@@ -38,7 +38,7 @@ public class PivotIOTalonFX implements PivotIO {
                 : InvertedValue.Clockwise_Positive)
         .withNeutralMode(
             PivotConstants.IS_BRAKE_MODE_ENABLED ? NeutralModeValue.Brake : NeutralModeValue.Coast)
-        .withControlTimesyncFreqHz(PivotConstants.UPDATE_FREQUENCY_HZ);
+        .withControlTimesyncFreqHz(RobotStateConstants.UPDATE_FREQUENCY_HZ);
 
     m_pivotTalonFX.setPosition(0.0);
     m_pivotTalonFX.optimizeBusUtilization();
@@ -58,11 +58,11 @@ public class PivotIOTalonFX implements PivotIO {
     m_currentAmps = m_pivotTalonFX.getStatorCurrent();
     m_tempCelsius = m_pivotTalonFX.getDeviceTemp();
 
-    m_positionRot.setUpdateFrequency(PivotConstants.UPDATE_FREQUENCY_HZ);
-    m_velocityRotPerSec.setUpdateFrequency(PivotConstants.UPDATE_FREQUENCY_HZ);
-    m_appliedVolts.setUpdateFrequency(PivotConstants.UPDATE_FREQUENCY_HZ);
-    m_currentAmps.setUpdateFrequency(PivotConstants.UPDATE_FREQUENCY_HZ);
-    m_tempCelsius.setUpdateFrequency(PivotConstants.UPDATE_FREQUENCY_HZ);
+    m_positionRot.setUpdateFrequency(RobotStateConstants.UPDATE_FREQUENCY_HZ);
+    m_velocityRotPerSec.setUpdateFrequency(RobotStateConstants.UPDATE_FREQUENCY_HZ);
+    m_appliedVolts.setUpdateFrequency(RobotStateConstants.UPDATE_FREQUENCY_HZ);
+    m_currentAmps.setUpdateFrequency(RobotStateConstants.UPDATE_FREQUENCY_HZ);
+    m_tempCelsius.setUpdateFrequency(RobotStateConstants.UPDATE_FREQUENCY_HZ);
   }
 
   @Override

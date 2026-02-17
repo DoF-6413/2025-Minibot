@@ -38,12 +38,12 @@ public class HopperIOTalonFX implements HopperIO {
                 : InvertedValue.Clockwise_Positive)
         .withNeutralMode(
             HopperConstants.IS_BRAKE_MODE_ENABLED ? NeutralModeValue.Brake : NeutralModeValue.Coast)
-        .withControlTimesyncFreqHz(HopperConstants.UPDATE_FREQUENCY_HZ);
+        .withControlTimesyncFreqHz(RobotStateConstants.UPDATE_FREQUENCY_HZ);
 
     m_hopper.getConfigurator().apply(m_motorConfig);
 
     BaseStatusSignal.setUpdateFrequencyForAll(
-        HopperConstants.UPDATE_FREQUENCY_HZ,
+        RobotStateConstants.UPDATE_FREQUENCY_HZ,
         hopperAppliedVolts,
         hopperCurrentAmps,
         hopperVelocityRotPerSec,

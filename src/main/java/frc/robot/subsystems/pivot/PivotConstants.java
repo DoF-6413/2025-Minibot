@@ -23,10 +23,6 @@ public class PivotConstants {
   public static final boolean ENABLE_CURRENT_LIMIT = true;
   public static final int CURRENT_LIMIT = 10;
 
-  /* Motor Configs */
-  /* Refreshes TalonFX signals 50 times a second (every 0.02 seconds) */
-  public static final double UPDATE_FREQUENCY_HZ = 50;
-
   /* Angle positions */
   public static final double MIN_ANGLE_RAD = Units.degreesToRadians(0.0); // TODO: measure
   public static final double MAX_ANGLE_RAD = Units.degreesToRadians(0.0); // TODO: measure

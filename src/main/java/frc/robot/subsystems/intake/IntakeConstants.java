@@ -17,10 +17,6 @@ public class IntakeConstants {
   public static final boolean ENABLE_CURRENT_LIMIT = true;
   public static final int CURRENT_LIMIT = 30;
 
-  /* Motor Configs */
-  /* Refreshes TalonFX signals 50 times a second (every 0.02 seconds) */
-  public static final double UPDATE_FREQUENCY_HZ = 50;
-
   /* PID & FF Constants */
   public static double kP = 0.0;
   public static double kI = 0.0;

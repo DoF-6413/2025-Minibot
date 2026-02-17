@@ -5,35 +5,41 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.superstructure.Superstructure;
-import frc.robot.subsystems.superstructure.SuperstructureConstants.FeederConstants;
-import frc.robot.subsystems.superstructure.SuperstructureConstants.ShooterConstants;
+import frc.robot.subsystems.feeder.Feeder;
+import frc.robot.subsystems.hopper.Hopper;
+import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.subsystems.shooter.ShooterConstants;
+import frc.robot.subsystems.shooter.ShooterConstants.FeederConstants;
 
 public class Launch extends Command {
-  public Superstructure superstructure;
+  public Shooter m_shooter;
+  public Feeder m_feeder;
+  public Hopper m_hopper;
 
-  public Launch(Superstructure superstructure) {
-    this.superstructure = superstructure;
+  public Launch(Shooter shooter, Feeder feeder, Hopper hopper) {
+    m_shooter = shooter;
+    m_feeder = feeder;
+    m_hopper = hopper;
 
-    addRequirements(superstructure);
+    addRequirements(shooter, feeder, hopper);
   }
 
   @Override
   public void initialize() {
-    superstructure.setFeederVoltage(FeederConstants.INTAKING_VOLTAGE);
-    superstructure.setShooterVoltage(ShooterConstants.LAUNCHING_VOLTAGE);
+    m_feeder.setVoltage(FeederConstants.INTAKING_VOLTAGE);
+    m_shooter.setVoltage(ShooterConstants.LAUNCHING_VOLTAGE);
   }
 
   @Override
   public void execute() {
-    superstructure.setFeederVoltage(FeederConstants.LAUNCHING_VOLTAGE);
-    superstructure.setShooterVoltage(ShooterConstants.LAUNCHING_VOLTAGE);
+    m_feeder.setVoltage(FeederConstants.LAUNCHING_VOLTAGE);
+    m_shooter.setVoltage(ShooterConstants.LAUNCHING_VOLTAGE);
   }
 
   @Override
   public void end(boolean interrupted) {
-    superstructure.setFeederVoltage(0.0);
-    superstructure.setShooterVoltage(0.0);
+    m_feeder.setVoltage(0.0);
+    m_shooter.setVoltage(0.0);
   }
 
   // TODO: COMMANDS TO IMPLEMENT!

@@ -51,7 +51,14 @@ public final class Constants {
       return DriverStation.getAlliance();
     }
 
+    /* Motor Configs */
+    /* Refreshes TalonFX signals 50 times a second (every 0.02 seconds) */
+    public static final double UPDATE_FREQUENCY_HZ = 50;
+    /* Times out PHX tuner config after 0.25 sec */
+    public static final double PHX_CONFIG_TIMEOUT_SEC = 0.25;
+    /* Times out CAN bus after 30 sec */
     public static final int CAN_CONFIG_TIMEOUT_SEC = 30;
+
     public static final double PERIODIC_LOOP_SEC = 0.02;
     public static final double MAX_VOLTAGE = 12;
 

@@ -38,7 +38,7 @@ public class IntakeIOTalonFX implements IntakeIO {
     tryUntilOk(5, () -> m_intake.getConfigurator().apply(motorConfig, 0.25));
 
     BaseStatusSignal.setUpdateFrequencyForAll(
-        IntakeConstants.UPDATE_FREQUENCY_HZ,
+        RobotStateConstants.UPDATE_FREQUENCY_HZ,
         intakeVelocityRotPerSec,
         intakeAppliedVolts,
         intakeCurrentAmps,
