@@ -14,12 +14,8 @@ import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.path.Waypoint;
-import com.pathplanner.lib.util.FileVersionException;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -40,7 +36,6 @@ import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
 import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
-
 import java.util.List;
 import java.util.Set;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
@@ -63,10 +58,14 @@ public class RobotContainer {
   private final LoggedDashboardChooser<Command> autoChooser;
 
   PathConstraints constraints = new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI);
-   List<Waypoint> hubWaypoint = PathPlannerPath.waypointsFromPoses(new Pose2d(2.882, 4.009, new
-     Rotation2d()));
-  PathPlannerPath path = new PathPlannerPath(hubWaypoint, constraints, null, new GoalEndState(0.0, new Rotation2d()))
-  //try {pathPathPlannerPath.fromPathFile("test");} catch (IOException | org.json.simple.parser.ParseException | FileVersionException e) {System.out.println("failed to load path");}
+  List<Waypoint> hubWaypoint =
+      PathPlannerPath.waypointsFromPoses(
+          new Pose2d(2.249, 4.057, new Rotation2d()), new Pose2d(3.347, 4.057, new Rotation2d()));
+  PathPlannerPath path =
+      new PathPlannerPath(hubWaypoint, constraints, null, new GoalEndState(0.0, new Rotation2d()));
+  // try {pathPathPlannerPath.fromPathFile("test");} catch (IOException |
+  // org.json.simple.parser.ParseException | FileVersionException e) {System.out.println("failed to
+  // load path");}
 
   /** The container for the robot. Contains subsystems, OI devices,jand commands. */
   public RobotContainer() {
@@ -182,13 +181,10 @@ public class RobotContainer {
   /** Use this to get the on-the-fly path following command */
   public Command getPathFindingCommand() {
     /**
-    Pose2d targetPose;
-    if (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue) {
-      targetPose = new Pose2d(2.882, 4.009, new Rotation2d());
-    } else {
-      targetPose = new Pose2d(13.652, 4.009, new Rotation2d(Units.degreesToRadians(180)));
-    }
-    */
+     * Pose2d targetPose; if (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue) {
+     * targetPose = new Pose2d(2.882, 4.009, new Rotation2d()); } else { targetPose = new
+     * Pose2d(13.652, 4.009, new Rotation2d(Units.degreesToRadians(180))); }
+     */
     return AutoBuilder.pathfindThenFollowPath(path, constraints);
   }
 }
