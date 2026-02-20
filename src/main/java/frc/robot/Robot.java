@@ -126,6 +126,14 @@ public class Robot extends LoggedRobot {
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
     }
+    CommandScheduler.getInstance()
+        .onCommandInterrupt(command -> System.out.println("Interrupted: " + command.getName()));
+
+    CommandScheduler.getInstance()
+        .onCommandFinish(command -> System.out.println("Finished: " + command.getName()));
+
+    CommandScheduler.getInstance()
+        .onCommandInitialize(command -> System.out.println("Started: " + command.getName()));
   }
 
   /** This function is called periodically during operator control. */
