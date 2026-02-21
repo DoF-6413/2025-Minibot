@@ -20,6 +20,8 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.DeferredCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
@@ -35,6 +37,7 @@ import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
 import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
 import java.util.List;
+import java.util.Set;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -48,24 +51,23 @@ public class RobotContainer {
   private final Drive drive;
   private final Vision vision;
 
-  // On-the-fly paths
-  List<Waypoint> waypoints =
-      PathPlannerPath.waypointsFromPoses(
-          new Pose2d(0.388, 0.364, Rotation2d.fromDegrees(48.854)),
-          new Pose2d(2.072, 2.469, Rotation2d.fromDegrees(54.607)),
-          new Pose2d(3.260, 4.057, Rotation2d.fromDegrees(52.509)));
-
-  PathConstraints constraints = new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI);
-
-  PathPlannerPath hub =
-      new PathPlannerPath(waypoints, constraints, null, new GoalEndState(0, new Rotation2d(0)));
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
 
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  PathConstraints constraints = new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI);
+  List<Waypoint> hubWaypoint =
+      PathPlannerPath.waypointsFromPoses(
+          new Pose2d(2.249, 4.057, new Rotation2d()), new Pose2d(3.347, 4.057, new Rotation2d()));
+  PathPlannerPath path =
+      new PathPlannerPath(hubWaypoint, constraints, null, new GoalEndState(0.0, new Rotation2d()));
+  // try {pathPathPlannerPath.fromPathFile("test");} catch (IOException |
+  // org.json.simple.parser.ParseException | FileVersionException e) {System.out.println("failed to
+  // load path");}
+
+  /** The container for the robot. Contains subsystems, OI devices,jand commands. */
   public RobotContainer() {
     switch (Constants.currentMode) {
       case REAL:
@@ -136,12 +138,7 @@ public class RobotContainer {
 
     // Set up on-the-fly paths
     // On-the-fly path to front of hub
-    /**
-     * List<Waypoint> hubWaypoint = PathPlannerPath.waypointsFromPoses(new Pose2d(2.882, 4.009, new
-     * Rotation2d())); PathConstraints constraints = PathConstraints.unlimitedConstraints(12.0);
-     * PathPlannerPath poseToHub = new PathPlannerPath( hubWaypoint, constraints, null, new
-     * GoalEndState(0.0, new Rotation2d()));
-     */
+    // PathConstraints constraints = PathConstraints.unlimitedConstraints(12.0);
 
     // Configure the button bindings
     configureButtonBindings();
@@ -166,18 +163,10 @@ public class RobotContainer {
     controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
 
     // Reset gyro to 0° when A button is pressed
-    controller
-        .a()
-        .onTrue(
-            Commands.runOnce(
-                    () ->
-                        drive.setPose(
-                            new Pose2d(drive.getPose().getTranslation(), Rotation2d.kZero)),
-                    drive)
-                .ignoringDisable(true));
+    controller.a().onTrue(new InstantCommand(() -> drive.zeroGyro(), drive));
 
     // Path find to in front of hub when Y button pressed
-    // controller.y().whileTrue(Commands.startRun(AutoBuilder.followPath()));
+    controller.y().whileTrue(Commands.startRun(AutoBuilder.followPath()));
   }
 
   /**
@@ -187,5 +176,15 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     return autoChooser.get();
+  }
+
+  /** Use this to get the on-the-fly path following command */
+  public Command getPathFindingCommand() {
+    /**
+     * Pose2d targetPose; if (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue) {
+     * targetPose = new Pose2d(2.882, 4.009, new Rotation2d()); } else { targetPose = new
+     * Pose2d(13.652, 4.009, new Rotation2d(Units.degreesToRadians(180))); }
+     */
+    return AutoBuilder.pathfindThenFollowPath(path, constraints);
   }
 }
