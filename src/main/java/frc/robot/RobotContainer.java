@@ -166,7 +166,7 @@ public class RobotContainer {
     controller.a().onTrue(new InstantCommand(() -> drive.zeroGyro(), drive));
 
     // Path find to in front of hub when Y button pressed
-    controller.y().whileTrue(Commands.startRun(AutoBuilder.followPath()));
+    controller.y().onTrue(new DeferredCommand(() -> getPathFindingCommand(), Set.of(drive)));
   }
 
   /**
