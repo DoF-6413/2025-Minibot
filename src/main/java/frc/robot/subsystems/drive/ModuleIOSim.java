@@ -98,7 +98,7 @@ public class ModuleIOSim implements ModuleIO {
     // Update turn inputs
     inputs.turnConnected = true;
     inputs.turnEncoderConnected = true;
-    inputs.turnAbsolutePosition = new Rotation2d(turnSim.getAngularPositionRad());
+    inputs.turnAbsolutePosition = turnSim.getAngularPositionRad();
     inputs.turnPosition = new Rotation2d(turnSim.getAngularPositionRad());
     inputs.turnVelocityRadPerSec = turnSim.getAngularVelocityRadPerSec();
     inputs.turnAppliedVolts = turnAppliedVolts;
