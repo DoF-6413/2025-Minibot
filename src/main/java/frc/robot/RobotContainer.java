@@ -7,6 +7,8 @@
 
 package frc.robot;
 
+import static frc.robot.Constants.AnalogEncoderConstants.*;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -53,10 +55,14 @@ public class RobotContainer {
         drive =
             new Drive(
                 new GyroIONavX(),
-                new ModuleIOTalonFX(TunerConstants.FrontLeft, new AnalogEncoder(1)),
-                new ModuleIOTalonFX(TunerConstants.FrontRight, new AnalogEncoder(1)),
-                new ModuleIOTalonFX(TunerConstants.BackLeft, new AnalogEncoder(2)),
-                new ModuleIOTalonFX(TunerConstants.BackRight, new AnalogEncoder(3)));
+                new ModuleIOTalonFX(
+                    TunerConstants.FrontLeft, new AnalogEncoder(FLChannel, fullRangeRad, FLZero)),
+                new ModuleIOTalonFX(
+                    TunerConstants.FrontRight, new AnalogEncoder(FRChannel, fullRangeRad, FRZero)),
+                new ModuleIOTalonFX(
+                    TunerConstants.BackLeft, new AnalogEncoder(BLChannel, fullRangeRad, BLZero)),
+                new ModuleIOTalonFX(
+                    TunerConstants.BackRight, new AnalogEncoder(BRChannel, fullRangeRad, BRZero)));
         break;
 
       case SIM:

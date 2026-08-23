@@ -28,4 +28,20 @@ public final class Constants {
     /** Replaying from a log file. */
     REPLAY
   }
+
+  public final class AnalogEncoderConstants {
+    public static final double fullRangeRad = 2 * Math.PI;
+    // Front left (Module 1)
+    public static final int FLChannel = 0;
+    public static final double FLZero = 0.0;
+    // Front right (Module 2)
+    public static final int FRChannel = 1;
+    public static final double FRZero = 0.0;
+    // Back right (Module 3)
+    public static final int BRChannel = 2;
+    public static final double BRZero = 0.0;
+    // Back left (Module 4)
+    public static final int BLChannel = 3;
+    public static final double BLZero = 0.0;
+  }
 }
