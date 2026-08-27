@@ -20,7 +20,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
-import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIONavX;
@@ -50,19 +49,17 @@ public class RobotContainer {
     switch (Constants.currentMode) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
-        // ModuleIOTalonFX is intended for modules with TalonFX drive, TalonFX turn, and
-        // a CANcoder
         drive =
             new Drive(
                 new GyroIONavX(),
                 new ModuleIOTalonFX(
-                    TunerConstants.FrontLeft, new AnalogEncoder(FLChannel, fullRangeRad, FLZero)),
+                    Constants.FrontLeft, new AnalogEncoder(FLChannel, fullRangeRad, FLZero)),
                 new ModuleIOTalonFX(
-                    TunerConstants.FrontRight, new AnalogEncoder(FRChannel, fullRangeRad, FRZero)),
+                    Constants.FrontRight, new AnalogEncoder(FRChannel, fullRangeRad, FRZero)),
                 new ModuleIOTalonFX(
-                    TunerConstants.BackLeft, new AnalogEncoder(BLChannel, fullRangeRad, BLZero)),
+                    Constants.BackLeft, new AnalogEncoder(BLChannel, fullRangeRad, BLZero)),
                 new ModuleIOTalonFX(
-                    TunerConstants.BackRight, new AnalogEncoder(BRChannel, fullRangeRad, BRZero)));
+                    Constants.BackRight, new AnalogEncoder(BRChannel, fullRangeRad, BRZero)));
         break;
 
       case SIM:
@@ -70,10 +67,10 @@ public class RobotContainer {
         drive =
             new Drive(
                 new GyroIO() {},
-                new ModuleIOSim(TunerConstants.FrontLeft),
-                new ModuleIOSim(TunerConstants.FrontRight),
-                new ModuleIOSim(TunerConstants.BackLeft),
-                new ModuleIOSim(TunerConstants.BackRight));
+                new ModuleIOSim(Constants.FrontLeft),
+                new ModuleIOSim(Constants.FrontRight),
+                new ModuleIOSim(Constants.BackLeft),
+                new ModuleIOSim(Constants.BackRight));
         break;
 
       default:

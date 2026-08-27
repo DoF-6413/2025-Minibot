@@ -7,27 +7,157 @@
 
 package frc.robot;
 
+import static edu.wpi.first.units.Units.*;
+
+import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.swerve.SwerveModuleConstants.ClosedLoopOutputType;
+import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj.RobotBase;
 
-/**
- * This class defines the runtime mode used by AdvantageKit. The mode is always "real" when running
- * on a roboRIO. Change the value of "simMode" to switch between "sim" (physics sim) and "replay"
- * (log replay from a file).
- */
 public final class Constants {
   public static final Mode simMode = Mode.SIM;
   public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : simMode;
 
+  // CAN bus name shared by all swerve devices
+  public static final String kCANBusName = "rio";
+
+  // Theoretical free speed (m/s) at 12 V applied output
+  public static final LinearVelocity kSpeedAt12Volts = MetersPerSecond.of(0.5);
+
   public static enum Mode {
-    /** Running on a real robot. */
     REAL,
-
-    /** Running a physics simulator. */
     SIM,
-
-    /** Replaying from a log file. */
     REPLAY
   }
+
+  /** Configuration for a single swerve module. */
+  public record ModuleConstants(
+      int driveMotorId,
+      int steerMotorId,
+      TalonFXConfiguration driveMotorInitialConfigs,
+      Slot0Configs driveMotorGains,
+      Slot0Configs steerMotorGains,
+      double driveMotorGearRatio,
+      double steerMotorGearRatio,
+      double slipCurrent,
+      boolean driveMotorInverted,
+      boolean steerMotorInverted,
+      ClosedLoopOutputType driveMotorClosedLoopOutput,
+      ClosedLoopOutputType steerMotorClosedLoopOutput,
+      double wheelRadius,
+      double locationX,
+      double locationY,
+      double driveInertia,
+      double steerInertia) {}
+
+  // Front Left
+  public static final ModuleConstants FrontLeft =
+      new ModuleConstants(
+          1, // driveMotorId
+          2, // steerMotorId
+          new TalonFXConfiguration(), // driveMotorInitialConfigs
+          new Slot0Configs().withKP(0.0).withKI(0).withKD(0).withKS(0).withKV(0.0), // driveGains
+          new Slot0Configs()
+              .withKP(100)
+              .withKI(0)
+              .withKD(0.5)
+              .withKS(0.1)
+              .withKV(2.66)
+              .withKA(0), // steerGains
+          6.122448979591837, // driveMotorGearRatio
+          21.428571428571427, // steerMotorGearRatio
+          120.0, // slipCurrent
+          false, // driveMotorInverted
+          true, // steerMotorInverted
+          ClosedLoopOutputType.Voltage, // driveMotorClosedLoopOutput
+          ClosedLoopOutputType.Voltage, // steerMotorClosedLoopOutput
+          0.0508, // wheelRadius (2 inches in meters)
+          0.3048, // locationX (12 inches in meters)
+          0.3048, // locationY (12 inches in meters)
+          0.01, // driveInertia
+          0.01); // steerInertia
+
+  // Front Right
+  public static final ModuleConstants FrontRight =
+      new ModuleConstants(
+          3, // driveMotorId
+          4, // steerMotorId
+          new TalonFXConfiguration(), // driveMotorInitialConfigs
+          new Slot0Configs().withKP(0.0).withKI(0).withKD(0).withKS(0).withKV(0.0), // driveGains
+          new Slot0Configs()
+              .withKP(100)
+              .withKI(0)
+              .withKD(0.5)
+              .withKS(0.1)
+              .withKV(2.66)
+              .withKA(0), // steerGains
+          6.122448979591837, // driveMotorGearRatio
+          21.428571428571427, // steerMotorGearRatio
+          120.0, // slipCurrent
+          true, // driveMotorInverted (right side)
+          true, // steerMotorInverted
+          ClosedLoopOutputType.Voltage, // driveMotorClosedLoopOutput
+          ClosedLoopOutputType.Voltage, // steerMotorClosedLoopOutput
+          0.0508, // wheelRadius
+          0.3048, // locationX
+          -0.3048, // locationY
+          0.01, // driveInertia
+          0.01); // steerInertia
+
+  // Back Left
+  public static final ModuleConstants BackLeft =
+      new ModuleConstants(
+          7, // driveMotorId
+          8, // steerMotorId
+          new TalonFXConfiguration(), // driveMotorInitialConfigs
+          new Slot0Configs().withKP(0.0).withKI(0).withKD(0).withKS(0).withKV(0.0), // driveGains
+          new Slot0Configs()
+              .withKP(100)
+              .withKI(0)
+              .withKD(0.5)
+              .withKS(0.1)
+              .withKV(2.66)
+              .withKA(0), // steerGains
+          6.122448979591837, // driveMotorGearRatio
+          21.428571428571427, // steerMotorGearRatio
+          120.0, // slipCurrent
+          false, // driveMotorInverted
+          true, // steerMotorInverted
+          ClosedLoopOutputType.Voltage, // driveMotorClosedLoopOutput
+          ClosedLoopOutputType.Voltage, // steerMotorClosedLoopOutput
+          0.0508, // wheelRadius
+          -0.3048, // locationX
+          0.3048, // locationY
+          0.01, // driveInertia
+          0.01); // steerInertia
+
+  // Back Right
+  public static final ModuleConstants BackRight =
+      new ModuleConstants(
+          5, // driveMotorId
+          6, // steerMotorId
+          new TalonFXConfiguration(), // driveMotorInitialConfigs
+          new Slot0Configs().withKP(0.0).withKI(0).withKD(0).withKS(0).withKV(0.0), // driveGains
+          new Slot0Configs()
+              .withKP(100)
+              .withKI(0)
+              .withKD(0.5)
+              .withKS(0.1)
+              .withKV(2.66)
+              .withKA(0), // steerGains
+          6.122448979591837, // driveMotorGearRatio
+          21.428571428571427, // steerMotorGearRatio
+          120.0, // slipCurrent
+          true, // driveMotorInverted (right side)
+          true, // steerMotorInverted
+          ClosedLoopOutputType.Voltage, // driveMotorClosedLoopOutput
+          ClosedLoopOutputType.Voltage, // steerMotorClosedLoopOutput
+          0.0508, // wheelRadius
+          -0.3048, // locationX
+          -0.3048, // locationY
+          0.01, // driveInertia
+          0.01); // steerInertia
 
   public final class AnalogEncoderConstants {
     public static final double fullRangeRad = 2 * Math.PI;
