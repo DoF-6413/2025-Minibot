@@ -163,7 +163,7 @@ public final class Constants {
     public static final double fullRangeRad = 2 * Math.PI;
     // Front left (Module 1)
     public static final int FLChannel = 0;
-    public static final double FLZero = 0.0;
+    public static final double FLZero = 5.7;
     // Front right (Module 2)
     public static final int FRChannel = 1;
     public static final double FRZero = 0.0;

@@ -118,7 +118,8 @@ public class ModuleIOTalonFX implements ModuleIO {
             ? InvertedValue.Clockwise_Positive
             : InvertedValue.CounterClockwise_Positive;
     tryUntilOk(5, () -> turnTalon.getConfigurator().apply(turnConfig, 0.25));
-    tryUntilOk(5, () -> turnTalon.setPosition(Units.radiansToRotations(turnAnalogEncoder.get()), 0.25));
+    tryUntilOk(
+        5, () -> turnTalon.setPosition(Units.radiansToRotations(turnAnalogEncoder.get()), 0.25));
 
     // Create timestamp queue
     timestampQueue = PhoenixOdometryThread.getInstance().makeTimestampQueue();
