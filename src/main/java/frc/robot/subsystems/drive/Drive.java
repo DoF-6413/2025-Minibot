@@ -106,8 +106,8 @@ public class Drive extends SubsystemBase {
     this.gyroIO = gyroIO;
     modules[0] = new Module(flModuleIO, 0, Constants.FrontLeft);
     modules[1] = new Module(frModuleIO, 1, Constants.FrontRight);
-    modules[2] = new Module(blModuleIO, 2, Constants.BackLeft);
-    modules[3] = new Module(brModuleIO, 3, Constants.BackRight);
+    modules[2] = new Module(brModuleIO, 2, Constants.BackRight);
+    modules[3] = new Module(blModuleIO, 3, Constants.BackLeft);
 
     // Usage reporting for swerve template
     HAL.report(tResourceType.kResourceType_RobotDrive, tInstances.kRobotDriveSwerve_AdvantageKit);

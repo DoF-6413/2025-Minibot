@@ -59,7 +59,7 @@ public final class Constants {
           new TalonFXConfiguration(), // driveMotorInitialConfigs
           new Slot0Configs().withKP(0.0).withKI(0).withKD(0).withKS(0).withKV(0.0), // driveGains
           new Slot0Configs()
-              .withKP(100)
+              .withKP(0)
               .withKI(0)
               .withKD(0.5)
               .withKS(0.1)
@@ -86,7 +86,7 @@ public final class Constants {
           new TalonFXConfiguration(), // driveMotorInitialConfigs
           new Slot0Configs().withKP(0.0).withKI(0).withKD(0).withKS(0).withKV(0.0), // driveGains
           new Slot0Configs()
-              .withKP(100)
+              .withKP(0)
               .withKI(0)
               .withKD(0.5)
               .withKS(0.1)
@@ -113,7 +113,7 @@ public final class Constants {
           new TalonFXConfiguration(), // driveMotorInitialConfigs
           new Slot0Configs().withKP(0.0).withKI(0).withKD(0).withKS(0).withKV(0.0), // driveGains
           new Slot0Configs()
-              .withKP(100)
+              .withKP(0)
               .withKI(0)
               .withKD(0.5)
               .withKS(0.1)
@@ -140,7 +140,7 @@ public final class Constants {
           new TalonFXConfiguration(), // driveMotorInitialConfigs
           new Slot0Configs().withKP(0.0).withKI(0).withKD(0).withKS(0).withKV(0.0), // driveGains
           new Slot0Configs()
-              .withKP(100)
+              .withKP(0)
               .withKI(0)
               .withKD(0.5)
               .withKS(0.1)
@@ -161,17 +161,17 @@ public final class Constants {
 
   public final class AnalogEncoderConstants {
     public static final double fullRangeRad = 2 * Math.PI;
-    // Front left (Module 1)
+    // Front left (Module 0)
     public static final int FLChannel = 0;
-    public static final double FLZero = 5.7;
-    // Front right (Module 2)
+    public static final double FLZero = 5.68;
+    // Front right (Module 1)
     public static final int FRChannel = 1;
-    public static final double FRZero = 0.0;
-    // Back right (Module 3)
+    public static final double FRZero = 3.72;
+    // Back right (Module 2)
     public static final int BRChannel = 2;
-    public static final double BRZero = 0.0;
-    // Back left (Module 4)
+    public static final double BRZero = 2.16;
+    // Back left (Module 3)
     public static final int BLChannel = 3;
-    public static final double BLZero = 0.0;
+    public static final double BLZero = 5.80;
   }
 }
