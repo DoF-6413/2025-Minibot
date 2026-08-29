@@ -13,17 +13,14 @@ public class DriveCommands {
   private DriveCommands() {}
 
   public static Command tankDrive(
-      Drive drive,
-      DoubleSupplier leftSupplier,
-      DoubleSupplier rightSupplier) {
+      Drive drive, DoubleSupplier leftSupplier, DoubleSupplier rightSupplier) {
     return Commands.run(
         () -> {
           double left = MathUtil.applyDeadband(leftSupplier.getAsDouble(), DEADBAND);
           double right = MathUtil.applyDeadband(rightSupplier.getAsDouble(), DEADBAND);
 
           drive.setVelocity(
-              left * DriveConstants.kMaxVelocityRPS,
-              right * DriveConstants.kMaxVelocityRPS);
+              left * DriveConstants.kMaxVelocityRPS, right * DriveConstants.kMaxVelocityRPS);
         },
         drive);
   }

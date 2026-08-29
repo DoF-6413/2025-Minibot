@@ -87,31 +87,44 @@ public class DriveIOTalonFX implements DriveIO {
     rightAppliedVolts = rightLead.getMotorVoltage();
     rightCurrent = rightLead.getStatorCurrent();
 
-    BaseStatusSignal.setUpdateFrequencyForAll(50.0, leftPosition, rightPosition, leftVelocity, leftAppliedVolts, leftCurrent, rightVelocity, rightAppliedVolts, rightCurrent);
+    BaseStatusSignal.setUpdateFrequencyForAll(
+        50.0,
+        leftPosition,
+        rightPosition,
+        leftVelocity,
+        leftAppliedVolts,
+        leftCurrent,
+        rightVelocity,
+        rightAppliedVolts,
+        rightCurrent);
   }
 
   @Override
   public void updateInputs(DriveIOInputs inputs) {
     // Update PID gains from tunable constants
-    var leftSlot0 = new Slot0Configs()
-        .withKP(DriveConstants.kLeftKP.get())
-        .withKI(DriveConstants.kLeftKI.get())
-        .withKD(DriveConstants.kLeftKD.get())
-        .withKS(DriveConstants.kLeftKS.get())
-        .withKV(DriveConstants.kLeftKV.get());
+    var leftSlot0 =
+        new Slot0Configs()
+            .withKP(DriveConstants.kLeftKP.get())
+            .withKI(DriveConstants.kLeftKI.get())
+            .withKD(DriveConstants.kLeftKD.get())
+            .withKS(DriveConstants.kLeftKS.get())
+            .withKV(DriveConstants.kLeftKV.get());
     leftLead.getConfigurator().apply(leftSlot0);
 
-    var rightSlot0 = new Slot0Configs()
-        .withKP(DriveConstants.kRightKP.get())
-        .withKI(DriveConstants.kRightKI.get())
-        .withKD(DriveConstants.kRightKD.get())
-        .withKS(DriveConstants.kRightKS.get())
-        .withKV(DriveConstants.kRightKV.get());
+    var rightSlot0 =
+        new Slot0Configs()
+            .withKP(DriveConstants.kRightKP.get())
+            .withKI(DriveConstants.kRightKI.get())
+            .withKD(DriveConstants.kRightKD.get())
+            .withKS(DriveConstants.kRightKS.get())
+            .withKV(DriveConstants.kRightKV.get());
     rightLead.getConfigurator().apply(rightSlot0);
 
     // Refresh signals
-    var leftStatus = BaseStatusSignal.refreshAll(leftPosition, leftVelocity, leftAppliedVolts, leftCurrent);
-    var rightStatus = BaseStatusSignal.refreshAll(rightPosition, rightVelocity, rightAppliedVolts, rightCurrent);
+    var leftStatus =
+        BaseStatusSignal.refreshAll(leftPosition, leftVelocity, leftAppliedVolts, leftCurrent);
+    var rightStatus =
+        BaseStatusSignal.refreshAll(rightPosition, rightVelocity, rightAppliedVolts, rightCurrent);
 
     inputs.leftConnected = leftConnectedDebounce.calculate(leftStatus.isOK());
     inputs.leftPositionRad = Units.rotationsToRadians(leftPosition.getValueAsDouble());

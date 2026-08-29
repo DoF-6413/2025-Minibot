@@ -5,8 +5,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.DriveCommands;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveIO;
-import frc.robot.subsystems.drive.DriveIOTalonFX;
 import frc.robot.subsystems.drive.DriveIOSim;
+import frc.robot.subsystems.drive.DriveIOTalonFX;
 
 public class RobotContainer {
   private final Drive drive;
@@ -33,9 +33,7 @@ public class RobotContainer {
   private void configureButtonBindings() {
     drive.setDefaultCommand(
         DriveCommands.tankDrive(
-            drive,
-            () -> -controller.getLeftY(),
-            () -> -controller.getRightY()));
+            drive, () -> -controller.getLeftY(), () -> -controller.getRightY()));
   }
 
   public Command getAutonomousCommand() {

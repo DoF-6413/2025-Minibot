@@ -24,12 +24,10 @@ public class DriveIOSim implements DriveIO {
   public DriveIOSim() {
     leftSim =
         new DCMotorSim(
-            LinearSystemId.createDCMotorSystem(GEARBOX, 0.01, DriveConstants.kGearRatio),
-            GEARBOX);
+            LinearSystemId.createDCMotorSystem(GEARBOX, 0.01, DriveConstants.kGearRatio), GEARBOX);
     rightSim =
         new DCMotorSim(
-            LinearSystemId.createDCMotorSystem(GEARBOX, 0.01, DriveConstants.kGearRatio),
-            GEARBOX);
+            LinearSystemId.createDCMotorSystem(GEARBOX, 0.01, DriveConstants.kGearRatio), GEARBOX);
   }
 
   @Override
@@ -44,10 +42,12 @@ public class DriveIOSim implements DriveIO {
     rightController.setD(DriveConstants.kRightKD.get());
 
     if (leftClosedLoop) {
-      leftAppliedVolts = leftFFVolts + leftController.calculate(leftSim.getAngularVelocityRadPerSec());
+      leftAppliedVolts =
+          leftFFVolts + leftController.calculate(leftSim.getAngularVelocityRadPerSec());
     }
     if (rightClosedLoop) {
-      rightAppliedVolts = rightFFVolts + rightController.calculate(rightSim.getAngularVelocityRadPerSec());
+      rightAppliedVolts =
+          rightFFVolts + rightController.calculate(rightSim.getAngularVelocityRadPerSec());
     }
 
     leftSim.setInputVoltage(MathUtil.clamp(leftAppliedVolts, -12.0, 12.0));
@@ -84,13 +84,17 @@ public class DriveIOSim implements DriveIO {
   public void setLeftVelocity(double velocityRadPerSec) {
     leftClosedLoop = true;
     leftController.setSetpoint(velocityRadPerSec);
-    leftFFVolts = DriveConstants.kLeftKS.get() * Math.signum(velocityRadPerSec) + DriveConstants.kLeftKV.get() * velocityRadPerSec;
+    leftFFVolts =
+        DriveConstants.kLeftKS.get() * Math.signum(velocityRadPerSec)
+            + DriveConstants.kLeftKV.get() * velocityRadPerSec;
   }
 
   @Override
   public void setRightVelocity(double velocityRadPerSec) {
     rightClosedLoop = true;
     rightController.setSetpoint(velocityRadPerSec);
-    rightFFVolts = DriveConstants.kRightKS.get() * Math.signum(velocityRadPerSec) + DriveConstants.kRightKV.get() * velocityRadPerSec;
+    rightFFVolts =
+        DriveConstants.kRightKS.get() * Math.signum(velocityRadPerSec)
+            + DriveConstants.kRightKV.get() * velocityRadPerSec;
   }
 }
