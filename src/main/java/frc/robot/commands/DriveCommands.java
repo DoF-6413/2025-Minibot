@@ -22,8 +22,8 @@ public class DriveCommands {
           double right = MathUtil.applyDeadband(rightSupplier.getAsDouble(), DEADBAND);
 
           drive.setVelocity(
-              left * DriveConstants.kMaxVelocityRadPerSec,
-              right * DriveConstants.kMaxVelocityRadPerSec);
+              left * DriveConstants.kMaxVelocityRPS,
+              right * DriveConstants.kMaxVelocityRPS);
         },
         drive);
   }

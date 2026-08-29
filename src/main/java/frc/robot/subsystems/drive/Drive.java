@@ -18,8 +18,7 @@ public class Drive extends SubsystemBase {
     Logger.processInputs("Drive", inputs);
 
     if (DriverStation.isDisabled()) {
-      io.setLeftVoltage(0.0);
-      io.setRightVoltage(0.0);
+      stop();
     }
   }
 
@@ -28,9 +27,9 @@ public class Drive extends SubsystemBase {
     io.setRightVoltage(rightVolts);
   }
 
-  public void setVelocity(double leftRadPerSec, double rightRadPerSec) {
-    io.setLeftVelocity(leftRadPerSec);
-    io.setRightVelocity(rightRadPerSec);
+  public void setVelocity(double leftRPS, double rightRPS) {
+    io.setLeftVelocity(leftRPS);
+    io.setRightVelocity(rightRPS);
   }
 
   public void stop() {

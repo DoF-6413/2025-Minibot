@@ -58,13 +58,7 @@ public class DriveIOTalonFX implements DriveIO {
             ? InvertedValue.Clockwise_Positive
             : InvertedValue.CounterClockwise_Positive;
     leftConfig.Feedback.SensorToMechanismRatio = DriveConstants.kGearRatio;
-    leftConfig.Slot0 =
-        new Slot0Configs()
-            .withKP(DriveConstants.kDriveKP)
-            .withKI(DriveConstants.kDriveKI)
-            .withKD(DriveConstants.kDriveKD)
-            .withKS(DriveConstants.kDriveKS)
-            .withKV(DriveConstants.kDriveKV);
+    leftConfig.Slot0 = new Slot0Configs();
     tryUntilOk(5, () -> leftLead.getConfigurator().apply(leftConfig, 0.25));
 
     // Configure right lead
@@ -75,13 +69,7 @@ public class DriveIOTalonFX implements DriveIO {
             ? InvertedValue.Clockwise_Positive
             : InvertedValue.CounterClockwise_Positive;
     rightConfig.Feedback.SensorToMechanismRatio = DriveConstants.kGearRatio;
-    rightConfig.Slot0 =
-        new Slot0Configs()
-            .withKP(DriveConstants.kDriveKP)
-            .withKI(DriveConstants.kDriveKI)
-            .withKD(DriveConstants.kDriveKD)
-            .withKS(DriveConstants.kDriveKS)
-            .withKV(DriveConstants.kDriveKV);
+    rightConfig.Slot0 = new Slot0Configs();
     tryUntilOk(5, () -> rightLead.getConfigurator().apply(rightConfig, 0.25));
 
     // Configure followers
@@ -99,11 +87,29 @@ public class DriveIOTalonFX implements DriveIO {
     rightAppliedVolts = rightLead.getMotorVoltage();
     rightCurrent = rightLead.getStatorCurrent();
 
-    BaseStatusSignal.setUpdateFrequencyForAll(50.0, leftPosition, rightPosition, leftVelocity, leftAppliedVolts, leftCurrent, rightPosition, rightVelocity, rightAppliedVolts, rightCurrent);
+    BaseStatusSignal.setUpdateFrequencyForAll(50.0, leftPosition, rightPosition, leftVelocity, leftAppliedVolts, leftCurrent, rightVelocity, rightAppliedVolts, rightCurrent);
   }
 
   @Override
   public void updateInputs(DriveIOInputs inputs) {
+    // Update PID gains from tunable constants
+    var leftSlot0 = new Slot0Configs()
+        .withKP(DriveConstants.kLeftKP.get())
+        .withKI(DriveConstants.kLeftKI.get())
+        .withKD(DriveConstants.kLeftKD.get())
+        .withKS(DriveConstants.kLeftKS.get())
+        .withKV(DriveConstants.kLeftKV.get());
+    leftLead.getConfigurator().apply(leftSlot0);
+
+    var rightSlot0 = new Slot0Configs()
+        .withKP(DriveConstants.kRightKP.get())
+        .withKI(DriveConstants.kRightKI.get())
+        .withKD(DriveConstants.kRightKD.get())
+        .withKS(DriveConstants.kRightKS.get())
+        .withKV(DriveConstants.kRightKV.get());
+    rightLead.getConfigurator().apply(rightSlot0);
+
+    // Refresh signals
     var leftStatus = BaseStatusSignal.refreshAll(leftPosition, leftVelocity, leftAppliedVolts, leftCurrent);
     var rightStatus = BaseStatusSignal.refreshAll(rightPosition, rightVelocity, rightAppliedVolts, rightCurrent);
 
@@ -131,12 +137,12 @@ public class DriveIOTalonFX implements DriveIO {
   }
 
   @Override
-  public void setLeftVelocity(double velocityRadPerSec) {
-    leftLead.setControl(velocityRequest.withVelocity(Units.radiansToRotations(velocityRadPerSec)));
+  public void setLeftVelocity(double velocityRPS) {
+    leftLead.setControl(velocityRequest.withVelocity(velocityRPS));
   }
 
   @Override
-  public void setRightVelocity(double velocityRadPerSec) {
-    rightLead.setControl(velocityRequest.withVelocity(Units.radiansToRotations(velocityRadPerSec)));
+  public void setRightVelocity(double velocityRPS) {
+    rightLead.setControl(velocityRequest.withVelocity(velocityRPS));
   }
 }
