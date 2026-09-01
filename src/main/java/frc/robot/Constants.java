@@ -54,8 +54,8 @@ public final class Constants {
   // Front Left
   public static final ModuleConstants FrontLeft =
       new ModuleConstants(
-          1, // driveMotorId
-          2, // steerMotorId
+          2, // driveMotorId
+          1, // steerMotorId
           new TalonFXConfiguration(), // driveMotorInitialConfigs
           new Slot0Configs().withKP(0.0).withKI(0).withKD(0).withKS(0).withKV(0.0), // driveGains
           new Slot0Configs()
@@ -81,8 +81,8 @@ public final class Constants {
   // Front Right
   public static final ModuleConstants FrontRight =
       new ModuleConstants(
-          3, // driveMotorId
-          4, // steerMotorId
+          4, // driveMotorId
+          3, // steerMotorId
           new TalonFXConfiguration(), // driveMotorInitialConfigs
           new Slot0Configs().withKP(0.0).withKI(0).withKD(0).withKS(0).withKV(0.0), // driveGains
           new Slot0Configs()
@@ -108,8 +108,8 @@ public final class Constants {
   // Back Left
   public static final ModuleConstants BackLeft =
       new ModuleConstants(
-          7, // driveMotorId
-          8, // steerMotorId
+          8, // driveMotorId
+          7, // steerMotorId
           new TalonFXConfiguration(), // driveMotorInitialConfigs
           new Slot0Configs().withKP(0.0).withKI(0).withKD(0).withKS(0).withKV(0.0), // driveGains
           new Slot0Configs()
@@ -135,8 +135,8 @@ public final class Constants {
   // Back Right
   public static final ModuleConstants BackRight =
       new ModuleConstants(
-          5, // driveMotorId
-          6, // steerMotorId
+          6, // driveMotorId
+          5, // steerMotorId
           new TalonFXConfiguration(), // driveMotorInitialConfigs
           new Slot0Configs().withKP(0.0).withKI(0).withKD(0).withKS(0).withKV(0.0), // driveGains
           new Slot0Configs()
