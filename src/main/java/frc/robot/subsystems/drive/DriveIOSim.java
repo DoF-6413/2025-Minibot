@@ -11,8 +11,10 @@ public class DriveIOSim implements DriveIO {
 
   private final DCMotorSim leftSim;
   private final DCMotorSim rightSim;
-  private final PIDController leftController = new PIDController(0, 0, 0);
-  private final PIDController rightController = new PIDController(0, 0, 0);
+  private final PIDController leftController =
+      new PIDController(DriveConstants.kP, DriveConstants.kI, DriveConstants.kD);
+  private final PIDController rightController =
+      new PIDController(DriveConstants.kP, DriveConstants.kI, DriveConstants.kD);
 
   private double leftAppliedVolts = 0.0;
   private double rightAppliedVolts = 0.0;
@@ -32,15 +34,6 @@ public class DriveIOSim implements DriveIO {
 
   @Override
   public void updateInputs(DriveIOInputs inputs) {
-    // Update PID gains from tunable constants
-    leftController.setP(DriveConstants.kLeftKP.get());
-    leftController.setI(DriveConstants.kLeftKI.get());
-    leftController.setD(DriveConstants.kLeftKD.get());
-
-    rightController.setP(DriveConstants.kRightKP.get());
-    rightController.setI(DriveConstants.kRightKI.get());
-    rightController.setD(DriveConstants.kRightKD.get());
-
     if (leftClosedLoop) {
       leftAppliedVolts =
           leftFFVolts + leftController.calculate(leftSim.getAngularVelocityRadPerSec());
@@ -85,8 +78,7 @@ public class DriveIOSim implements DriveIO {
     leftClosedLoop = true;
     leftController.setSetpoint(velocityRadPerSec);
     leftFFVolts =
-        DriveConstants.kLeftKS.get() * Math.signum(velocityRadPerSec)
-            + DriveConstants.kLeftKV.get() * velocityRadPerSec;
+        DriveConstants.kS * Math.signum(velocityRadPerSec) + DriveConstants.kV * velocityRadPerSec;
   }
 
   @Override
@@ -94,7 +86,6 @@ public class DriveIOSim implements DriveIO {
     rightClosedLoop = true;
     rightController.setSetpoint(velocityRadPerSec);
     rightFFVolts =
-        DriveConstants.kRightKS.get() * Math.signum(velocityRadPerSec)
-            + DriveConstants.kRightKV.get() * velocityRadPerSec;
+        DriveConstants.kS * Math.signum(velocityRadPerSec) + DriveConstants.kV * velocityRadPerSec;
   }
 }

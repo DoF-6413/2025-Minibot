@@ -15,6 +15,11 @@ public interface DriveIO {
     public double rightVelocityRadPerSec = 0.0;
     public double rightAppliedVolts = 0.0;
     public double rightCurrentAmps = 0.0;
+
+    public double FLAngleRot = 0.0;
+    public double FRAngleRot = 0.0;
+    public double BRAngleRot = 0.0;
+    public double BLAngleRot = 0.0;
   }
 
   public default void updateInputs(DriveIOInputs inputs) {}
@@ -26,4 +31,6 @@ public interface DriveIO {
   public default void setLeftVelocity(double velocityRadPerSec) {}
 
   public default void setRightVelocity(double velocityRadPerSec) {}
+
+  public default void setTurnPositions(double fl, double fr, double bl, double br) {}
 }

@@ -20,6 +20,7 @@ public class Drive extends SubsystemBase {
     if (DriverStation.isDisabled()) {
       stop();
     }
+    holdWheelsStraight();
   }
 
   public void setSpeeds(double leftVolts, double rightVolts) {
@@ -30,6 +31,10 @@ public class Drive extends SubsystemBase {
   public void setVelocity(double leftRPS, double rightRPS) {
     io.setLeftVelocity(leftRPS);
     io.setRightVelocity(rightRPS);
+  }
+
+  public void holdWheelsStraight() {
+    io.setTurnPositions(0.0, 0.0, 0.0, 0.0);
   }
 
   public void stop() {
