@@ -21,45 +21,46 @@ public final class DriveConstants {
   public static final double kMaxVelocityRPS = 10;
 
   // Turn motor constants
-  public static final double kTurnRatio = 21.428571428571427;
+  public static final double kTurnRatio = 8.53333333333 * 1.5;
+  public static final double kEncoderFullRange = 2 * Math.PI;
 
   // Front left
   public static final int kFLTurnMotorId = 1;
   public static final int kFLEncoderPort = 0;
-  public static final double kFLP = 0.1;
-  public static final double kFLI = 0.0;
+  public static final double kFLP = 1.5;
+  public static final double kFLI = 0.1;
   public static final double kFLD = 0.0;
   public static final double kFLS = 0.0;
   public static final double kFLV = 0.124;
-  public static final double kFLZero = 0.904;
+  public static final double kFLZero = 5.732; // 5.68
 
   // Front right
   public static final int kFRTurnMotorId = 3;
   public static final int kFREncoderPort = 1;
-  public static final double kFRP = 0.1;
-  public static final double kFRI = 0.0;
+  public static final double kFRP = 1.5;
+  public static final double kFRI = 0.1;
   public static final double kFRD = 0.0;
   public static final double kFRS = 0.0;
   public static final double kFRV = 0.124;
-  public static final double kFRZero = 0.592;
+  public static final double kFRZero = 3.772; // 3.72
 
   // Back right
   public static final int kBRTurnMotorId = 5;
   public static final int kBREncoderPort = 2;
-  public static final double kBRP = 0.1;
-  public static final double kBRI = 0.0;
+  public static final double kBRP = 1.5;
+  public static final double kBRI = 0.1;
   public static final double kBRD = 0.0;
   public static final double kBRS = 0.0;
   public static final double kBRV = 0.124;
-  public static final double kBRZero = 0.344;
+  public static final double kBRZero = 2.191; // 2.16
 
   // Back left
   public static final int kBLTurnMotorId = 7;
   public static final int kBLEncoderPort = 3;
-  public static final double kBLP = 0.1;
-  public static final double kBLI = 0.0;
+  public static final double kBLP = 1.5;
+  public static final double kBLI = 0.1;
   public static final double kBLD = 0.0;
   public static final double kBLS = 0.0;
   public static final double kBLV = 0.124;
-  public static final double kBLZero = 0.923;
+  public static final double kBLZero = 5.737; // 5.80
 }

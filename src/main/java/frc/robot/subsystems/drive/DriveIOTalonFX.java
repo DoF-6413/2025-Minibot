@@ -7,9 +7,9 @@ import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
-import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
@@ -21,6 +21,7 @@ import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.AnalogEncoder;
+import org.littletonrobotics.junction.Logger;
 
 public class DriveIOTalonFX implements DriveIO {
   private final TalonFX leftLead;
@@ -52,9 +53,16 @@ public class DriveIOTalonFX implements DriveIO {
   private final StatusSignal<Voltage> rightAppliedVolts;
   private final StatusSignal<Current> rightCurrent;
 
+  private final StatusSignal<Angle> FLAngle;
+  private final StatusSignal<Angle> FRAngle;
+  private final StatusSignal<Angle> BRAngle;
+  private final StatusSignal<Angle> BLAngle;
+
   private final Debouncer leftConnectedDebounce =
       new Debouncer(0.5, Debouncer.DebounceType.kFalling);
   private final Debouncer rightConnectedDebounce =
+      new Debouncer(0.5, Debouncer.DebounceType.kFalling);
+  private final Debouncer turnMotorsConnectedDebouce =
       new Debouncer(0.5, Debouncer.DebounceType.kFalling);
 
   public DriveIOTalonFX() {
@@ -68,10 +76,31 @@ public class DriveIOTalonFX implements DriveIO {
     BRTurn = new TalonFX(DriveConstants.kBRTurnMotorId);
     BLTurn = new TalonFX(DriveConstants.kBLTurnMotorId);
 
-    FLEncoder = new AnalogEncoder(DriveConstants.kFLEncoderPort, 1.0, DriveConstants.kFLZero);
-    FREncoder = new AnalogEncoder(DriveConstants.kFREncoderPort, 1.0, DriveConstants.kFRZero);
-    BREncoder = new AnalogEncoder(DriveConstants.kBREncoderPort, 1.0, DriveConstants.kBRZero);
-    BLEncoder = new AnalogEncoder(DriveConstants.kBLEncoderPort, 1.0, DriveConstants.kBLZero);
+    FLEncoder =
+        new AnalogEncoder(
+            DriveConstants.kFLEncoderPort,
+            DriveConstants.kEncoderFullRange,
+            DriveConstants.kFLZero);
+    FREncoder =
+        new AnalogEncoder(
+            DriveConstants.kFREncoderPort,
+            DriveConstants.kEncoderFullRange,
+            DriveConstants.kFRZero);
+    BREncoder =
+        new AnalogEncoder(
+            DriveConstants.kBREncoderPort,
+            DriveConstants.kEncoderFullRange,
+            DriveConstants.kBRZero);
+    BLEncoder =
+        new AnalogEncoder(
+            DriveConstants.kBLEncoderPort,
+            DriveConstants.kEncoderFullRange,
+            DriveConstants.kBLZero);
+
+    Logger.recordOutput("FLAbsoluteAngle", FLEncoder.get());
+    Logger.recordOutput("FRAbsoluteAngle", FREncoder.get());
+    Logger.recordOutput("BRAbsoluteAngle", BREncoder.get());
+    Logger.recordOutput("BLAbsoluteAngle", BLEncoder.get());
 
     var slot0 =
         new Slot0Configs()
@@ -119,7 +148,7 @@ public class DriveIOTalonFX implements DriveIO {
             .withKD(DriveConstants.kFLD)
             .withKV(DriveConstants.kFLV);
     tryUntilOk(5, () -> FLTurn.getConfigurator().apply(FLConfig, 0.25));
-    tryUntilOk(5, ()-> FLTurn.setPosition(FLEncoder.get(), 0.25));
+    tryUntilOk(5, () -> FLTurn.setPosition(Units.radiansToRotations(FLEncoder.get()), 0.25));
 
     var FRConfig = new TalonFXConfiguration();
     FRConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
@@ -132,7 +161,7 @@ public class DriveIOTalonFX implements DriveIO {
             .withKD(DriveConstants.kFRD)
             .withKV(DriveConstants.kFRV);
     tryUntilOk(5, () -> FRTurn.getConfigurator().apply(FRConfig, 0.25));
-    tryUntilOk(5, ()-> FRTurn.setPosition(FREncoder.get(), 0.25));
+    tryUntilOk(5, () -> FRTurn.setPosition(Units.radiansToRotations(FREncoder.get()), 0.25));
 
     var BRConfig = new TalonFXConfiguration();
     BRConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
@@ -145,7 +174,7 @@ public class DriveIOTalonFX implements DriveIO {
             .withKD(DriveConstants.kBRD)
             .withKV(DriveConstants.kBRV);
     tryUntilOk(5, () -> BRTurn.getConfigurator().apply(BRConfig, 0.25));
-    tryUntilOk(5, ()-> BRTurn.setPosition(BREncoder.get(), 0.25));
+    tryUntilOk(5, () -> BRTurn.setPosition(Units.radiansToRotations(BREncoder.get()), 0.25));
 
     var BLConfig = new TalonFXConfiguration();
     BLConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
@@ -158,7 +187,7 @@ public class DriveIOTalonFX implements DriveIO {
             .withKD(DriveConstants.kBLD)
             .withKV(DriveConstants.kBLV);
     tryUntilOk(5, () -> BLTurn.getConfigurator().apply(BLConfig, 0.25));
-    tryUntilOk(5, ()-> BLTurn.setPosition(BLEncoder.get(), 0.25));
+    tryUntilOk(5, () -> BLTurn.setPosition(Units.radiansToRotations(BLEncoder.get()), 0.25));
 
     // Status signals
     leftPosition = leftLead.getPosition();
@@ -171,6 +200,11 @@ public class DriveIOTalonFX implements DriveIO {
     rightAppliedVolts = rightLead.getMotorVoltage();
     rightCurrent = rightLead.getStatorCurrent();
 
+    FLAngle = FLTurn.getPosition();
+    FRAngle = FRTurn.getPosition();
+    BRAngle = BRTurn.getPosition();
+    BLAngle = BLTurn.getPosition();
+
     BaseStatusSignal.setUpdateFrequencyForAll(
         50.0,
         leftPosition,
@@ -180,7 +214,11 @@ public class DriveIOTalonFX implements DriveIO {
         leftCurrent,
         rightVelocity,
         rightAppliedVolts,
-        rightCurrent);
+        rightCurrent,
+        FLAngle,
+        FRAngle,
+        BRAngle,
+        BLAngle);
   }
 
   @Override
@@ -189,6 +227,7 @@ public class DriveIOTalonFX implements DriveIO {
         BaseStatusSignal.refreshAll(leftPosition, leftVelocity, leftAppliedVolts, leftCurrent);
     var rightStatus =
         BaseStatusSignal.refreshAll(rightPosition, rightVelocity, rightAppliedVolts, rightCurrent);
+    var turnMotorStatuses = BaseStatusSignal.refreshAll(FLAngle, FRAngle, BRAngle, BLAngle);
 
     inputs.leftConnected = leftConnectedDebounce.calculate(leftStatus.isOK());
     inputs.leftPositionRad = Units.rotationsToRadians(leftPosition.getValueAsDouble());
@@ -201,6 +240,12 @@ public class DriveIOTalonFX implements DriveIO {
     inputs.rightVelocityRadPerSec = Units.rotationsToRadians(rightVelocity.getValueAsDouble());
     inputs.rightAppliedVolts = rightAppliedVolts.getValueAsDouble();
     inputs.rightCurrentAmps = rightCurrent.getValueAsDouble();
+
+    inputs.turnMotorsConnected = turnMotorsConnectedDebouce.calculate(turnMotorStatuses.isOK());
+    inputs.FLAngleRot = FLAngle.getValueAsDouble();
+    inputs.FRAngleRot = FRAngle.getValueAsDouble();
+    inputs.BRAngleRot = BRAngle.getValueAsDouble();
+    inputs.BLAngleRot = BLAngle.getValueAsDouble();
   }
 
   @Override

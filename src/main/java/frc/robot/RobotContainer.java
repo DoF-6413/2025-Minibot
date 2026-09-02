@@ -34,6 +34,8 @@ public class RobotContainer {
     drive.setDefaultCommand(
         DriveCommands.tankDrive(
             drive, () -> -controller.getLeftY(), () -> -controller.getRightY()));
+
+    controller.a().whileTrue(DriveCommands.testTurn(drive));
   }
 
   public Command getAutonomousCommand() {

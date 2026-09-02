@@ -37,6 +37,10 @@ public class Drive extends SubsystemBase {
     io.setTurnPositions(0.0, 0.0, 0.0, 0.0);
   }
 
+  public void setTurnDirection(double fl, double fr, double bl, double br) {
+    io.setTurnPositions(fl, fr, bl, br);
+  }
+
   public void stop() {
     io.setLeftVoltage(0.0);
     io.setRightVoltage(0.0);

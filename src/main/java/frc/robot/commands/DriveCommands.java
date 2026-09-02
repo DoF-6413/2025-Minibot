@@ -21,7 +21,12 @@ public class DriveCommands {
 
           drive.setVelocity(
               left * DriveConstants.kMaxVelocityRPS, right * DriveConstants.kMaxVelocityRPS);
+          drive.holdWheelsStraight();
         },
         drive);
+  }
+
+  public static Command testTurn(Drive drive) {
+    return Commands.run(() -> drive.setTurnDirection(0.5, 0.5, 0.5, 0.5), drive);
   }
 }
