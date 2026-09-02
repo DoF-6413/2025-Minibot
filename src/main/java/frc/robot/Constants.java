@@ -57,7 +57,9 @@ public final class Constants {
           2, // driveMotorId
           1, // steerMotorId
           new TalonFXConfiguration(), // driveMotorInitialConfigs
-          new Slot0Configs().withKP(0.0).withKI(0).withKD(0).withKS(0).withKV(0.0), // driveGains
+          // Starting values only (Tuner X is not usable for this hardware setup) -
+          // refine with the Drive SysId/feedforward characterization routines in the auto chooser.
+          new Slot0Configs().withKP(2.0).withKI(0).withKD(0).withKS(0.1).withKV(7.66), // driveGains
           new Slot0Configs()
               .withKP(0)
               .withKI(0)
@@ -84,7 +86,9 @@ public final class Constants {
           4, // driveMotorId
           3, // steerMotorId
           new TalonFXConfiguration(), // driveMotorInitialConfigs
-          new Slot0Configs().withKP(0.0).withKI(0).withKD(0).withKS(0).withKV(0.0), // driveGains
+          // Starting values only (Tuner X is not usable for this hardware setup) -
+          // refine with the Drive SysId/feedforward characterization routines in the auto chooser.
+          new Slot0Configs().withKP(2.0).withKI(0).withKD(0).withKS(0.1).withKV(7.66), // driveGains
           new Slot0Configs()
               .withKP(0)
               .withKI(0)
@@ -111,7 +115,9 @@ public final class Constants {
           8, // driveMotorId
           7, // steerMotorId
           new TalonFXConfiguration(), // driveMotorInitialConfigs
-          new Slot0Configs().withKP(0.0).withKI(0).withKD(0).withKS(0).withKV(0.0), // driveGains
+          // Starting values only (Tuner X is not usable for this hardware setup) -
+          // refine with the Drive SysId/feedforward characterization routines in the auto chooser.
+          new Slot0Configs().withKP(2.0).withKI(0).withKD(0).withKS(0.1).withKV(7.66), // driveGains
           new Slot0Configs()
               .withKP(0)
               .withKI(0)
@@ -138,7 +144,9 @@ public final class Constants {
           6, // driveMotorId
           5, // steerMotorId
           new TalonFXConfiguration(), // driveMotorInitialConfigs
-          new Slot0Configs().withKP(0.0).withKI(0).withKD(0).withKS(0).withKV(0.0), // driveGains
+          // Starting values only (Tuner X is not usable for this hardware setup) -
+          // refine with the Drive SysId/feedforward characterization routines in the auto chooser.
+          new Slot0Configs().withKP(2.0).withKI(0).withKD(0).withKS(0.1).withKV(7.66), // driveGains
           new Slot0Configs()
               .withKP(0)
               .withKI(0)
