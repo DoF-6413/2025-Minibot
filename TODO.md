@@ -94,10 +94,10 @@ before running at full commanded speed; lower if needed.
 
 ## 5. Fixes for #1 and #2 are not yet committed
 
-**Status:** OPEN
+**Status:** FIXED
 
-**Problem:** The module-order and drive-gain fixes are sitting as
-uncommitted changes on `bruce_drive`. Nothing has been committed or pushed.
+**Problem:** The module-order and drive-gain fixes were sitting as
+uncommitted changes on `bruce_drive`.
 
-**Next step:** Commit once the fixes have been tested on hardware (or
-sooner, if you'd rather commit work-in-progress now).
+**Fix:** Committed on `bruce_drive` as `99d0fa6` ("Fix swerve drive bugs:
+back module swap and zero drive gains"). Not pushed to the remote.
