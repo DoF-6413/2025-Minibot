@@ -106,7 +106,13 @@ public class ModuleIOTalonFX implements ModuleIO {
     var turnConfig = new TalonFXConfiguration();
     turnConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
     turnConfig.Slot0 = constants.steerMotorGains();
-    turnConfig.Feedback.RotorToSensorRatio = constants.steerMotorGearRatio();
+    // RotorToSensorRatio only applies gear scaling when a remote CANcoder is configured as the
+    // feedback sensor. This module has no CANcoder (just an analog pot read by the RIO), so the
+    // Talon falls back to its internal rotor sensor and RotorToSensorRatio is silently ignored -
+    // position feedback was raw motor rotations, off by the ~21:1 steer gear ratio. Use
+    // SensorToMechanismRatio instead, same as the drive motor above, to scale rotor rotations
+    // down to actual module rotations.
+    turnConfig.Feedback.SensorToMechanismRatio = constants.steerMotorGearRatio();
     turnConfig.MotionMagic.MotionMagicCruiseVelocity = 100.0 / constants.steerMotorGearRatio();
     turnConfig.MotionMagic.MotionMagicAcceleration =
         turnConfig.MotionMagic.MotionMagicCruiseVelocity / 0.100;
@@ -154,6 +160,14 @@ public class ModuleIOTalonFX implements ModuleIO {
 
   @Override
   public void updateInputs(ModuleIOInputs inputs) {
+    // The turn motor's absolute angle only lives in the Talon's internal rotor position
+    // register, seeded once from the analog encoder at startup. A brownout or CAN reset mid-match
+    // zeroes that register, so re-seed it from the absolute analog encoder whenever a reset is
+    // detected instead of only once in the constructor.
+    if (turnTalon.hasResetOccurred()) {
+      turnTalon.setPosition(Units.radiansToRotations(analogEncoder.get()));
+    }
+
     // Refresh all signals
     var driveStatus =
         BaseStatusSignal.refreshAll(drivePosition, driveVelocity, driveAppliedVolts, driveCurrent);
