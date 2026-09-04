@@ -16,6 +16,8 @@ public interface DriveIO {
     public double rightAppliedVolts = 0.0;
     public double rightCurrentAmps = 0.0;
 
+    public double BLEncoderAbsoluteAngle = 0.0;
+
     public boolean turnMotorsConnected = false;
     public double FLAngleRot = 0.0;
     public double FRAngleRot = 0.0;
