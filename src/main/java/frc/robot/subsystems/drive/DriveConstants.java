@@ -21,13 +21,13 @@ public final class DriveConstants {
   public static final double kMaxVelocityRPS = 10;
 
   // Turn motor constants
-  public static final double kTurnRatio = 8.53333333333 * 1.5;
+  public static final double kTurnRatio = 12.8;
   public static final double kEncoderFullRange = 2 * Math.PI;
 
   // Front left
   public static final int kFLTurnMotorId = 1;
   public static final int kFLEncoderPort = 0;
-  public static final double kFLP = 1.0;
+  public static final double kFLP = 60;
   public static final double kFLI = 0.0;
   public static final double kFLD = 0.0;
   public static final double kFLS = 0.0;

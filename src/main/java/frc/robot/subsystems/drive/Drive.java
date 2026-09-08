@@ -34,7 +34,7 @@ public class Drive extends SubsystemBase {
   }
 
   public void holdWheelsStraight() {
-    io.setTurnPositions(0.5, 0.5, 0.5, 0.5);
+    io.setTurnPositions(0.0, 0.0, 0.0, 0.0);
   }
 
   public void setTurnDirection(double fl, double fr, double bl, double br) {
