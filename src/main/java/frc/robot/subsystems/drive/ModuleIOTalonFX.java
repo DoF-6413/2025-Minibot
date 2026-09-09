@@ -27,6 +27,8 @@ import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.AnalogEncoder;
+import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.subsystems.drive.DriveConstants.ModuleConstants;
 import java.util.Queue;
 
@@ -41,6 +43,8 @@ public class ModuleIOTalonFX implements ModuleIO {
   private final TalonFX driveTalon;
   private final TalonFX turnTalon;
   private final AnalogEncoder turnEncoder;
+  private final AnalogInput turnEncoderAnalogInput;
+  private final ModuleConstants constants;
 
   private final VoltageOut voltageRequest = new VoltageOut(0);
   private final PositionVoltage positionRequest = new PositionVoltage(0.0);
@@ -62,8 +66,10 @@ public class ModuleIOTalonFX implements ModuleIO {
 
   private final Debouncer driveConnectedDebounce = new Debouncer(0.5);
   private final Debouncer turnConnectedDebounce = new Debouncer(0.5);
+  private final Debouncer turnEncoderConnectedDebounce = new Debouncer(0.5);
 
   public ModuleIOTalonFX(ModuleConstants constants) {
+    this.constants = constants;
     driveTalon = new TalonFX(constants.driveMotorId(), DriveConstants.kCANBus);
     turnTalon = new TalonFX(constants.turnMotorId(), DriveConstants.kCANBus);
     // AnalogEncoder(channel, fullRange, expectedZero): full range is 2*PI
@@ -72,6 +78,10 @@ public class ModuleIOTalonFX implements ModuleIO {
     turnEncoder =
         new AnalogEncoder(
             constants.encoderChannel(), 2.0 * Math.PI, constants.encoderOffsetRadians());
+    // Separate raw AnalogInput on the same channel, used only to read the raw
+    // voltage for connection-health checking (AnalogEncoder itself exposes no
+    // connection-health API).
+    turnEncoderAnalogInput = new AnalogInput(constants.encoderChannel());
 
     var driveConfig = new TalonFXConfiguration();
     driveConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
@@ -107,10 +117,12 @@ public class ModuleIOTalonFX implements ModuleIO {
             .withKD(DriveConstants.kTurnD)
             .withKS(DriveConstants.kTurnS)
             .withKV(DriveConstants.kTurnV);
+    turnConfig.CurrentLimits.StatorCurrentLimit = DriveConstants.kTurnCurrentLimitAmps;
+    turnConfig.CurrentLimits.StatorCurrentLimitEnable = true;
     tryUntilOk(5, () -> turnTalon.getConfigurator().apply(turnConfig, 0.25));
     // Seed the Falcon's internal rotor position from the analog encoder's
     // absolute reading (Research.md step 3).
-    tryUntilOk(5, () -> turnTalon.setPosition(Units.radiansToRotations(turnEncoder.get()), 0.25));
+    seedTurnPosition();
 
     timestampQueue = PhoenixOdometryThread.getInstance().makeTimestampQueue();
 
@@ -139,12 +151,32 @@ public class ModuleIOTalonFX implements ModuleIO {
         turnCurrent);
   }
 
+  /**
+   * Seeds the turn Falcon's internal rotor position from the analog encoder's absolute reading.
+   * Called once at construction, and again from {@link #updateInputs} any time a Talon reset is
+   * detected, since a reset (e.g. brownout) discards the previously seeded rotor position.
+   */
+  private void seedTurnPosition() {
+    tryUntilOk(5, () -> turnTalon.setPosition(Units.radiansToRotations(turnEncoder.get()), 0.25));
+  }
+
   @Override
   public void updateInputs(ModuleIOInputs inputs) {
     var driveStatus =
         BaseStatusSignal.refreshAll(drivePosition, driveVelocity, driveAppliedVolts, driveCurrent);
     var turnStatus =
         BaseStatusSignal.refreshAll(turnPosition, turnVelocity, turnAppliedVolts, turnCurrent);
+
+    if (turnTalon.hasResetOccurred()) {
+      DriverStation.reportWarning(
+          "Turn Falcon (CAN ID "
+              + constants.turnMotorId()
+              + ", drive CAN ID "
+              + constants.driveMotorId()
+              + ") reset detected; re-seeding turn position from analog encoder.",
+          false);
+      seedTurnPosition();
+    }
 
     inputs.driveConnected = driveConnectedDebounce.calculate(driveStatus.isOK());
     inputs.drivePositionRad = Units.rotationsToRadians(drivePosition.getValueAsDouble());
@@ -153,9 +185,13 @@ public class ModuleIOTalonFX implements ModuleIO {
     inputs.driveCurrentAmps = driveCurrent.getValueAsDouble();
 
     inputs.turnConnected = turnConnectedDebounce.calculate(turnStatus.isOK());
-    // AnalogEncoder exposes no connection-health API, unlike a CANcoder status
-    // signal — there's nothing more specific to debounce here.
-    inputs.turnEncoderConnected = true;
+    // A disconnected/unpowered analog encoder typically reads a voltage
+    // pinned near a rail (near 0V or near the 5V supply) rather than a
+    // normal in-range reading, so use raw voltage as the health signal.
+    double turnEncoderVoltage = turnEncoderAnalogInput.getVoltage();
+    inputs.turnEncoderConnected =
+        turnEncoderConnectedDebounce.calculate(
+            turnEncoderVoltage > 0.1 && turnEncoderVoltage < 4.9);
     inputs.turnAbsolutePosition = new Rotation2d(turnEncoder.get());
     inputs.turnPosition = Rotation2d.fromRotations(turnPosition.getValueAsDouble());
     inputs.turnVelocityRadPerSec = Units.rotationsToRadians(turnVelocity.getValueAsDouble());

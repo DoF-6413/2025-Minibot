@@ -41,6 +41,9 @@ public final class DriveConstants {
   /** Drive motor stator current limit (amps). Safe default; retune after testing. */
   public static final double kDriveCurrentLimitAmps = 60.0;
 
+  /** Turn motor stator current limit (amps). Safe default; retune after testing. */
+  public static final double kTurnCurrentLimitAmps = 40.0;
+
   // Drive closed-loop gains (measured, from TankDrive).
   public static final double kDriveP = 0.1;
   public static final double kDriveI = 0.0;
