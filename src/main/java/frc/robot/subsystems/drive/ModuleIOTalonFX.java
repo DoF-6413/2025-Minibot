@@ -68,6 +68,12 @@ public class ModuleIOTalonFX implements ModuleIO {
   private final Debouncer turnConnectedDebounce = new Debouncer(0.5);
   private final Debouncer turnEncoderConnectedDebounce = new Debouncer(0.5);
 
+  // Set when a Talon reset is detected but the analog encoder doesn't look
+  // healthy yet, so the re-seed is deferred rather than trusting a possibly
+  // rail-pinned reading. Retried every updateInputs() cycle until the
+  // encoder reads healthy again.
+  private boolean turnReseedPending = false;
+
   public ModuleIOTalonFX(ModuleConstants constants) {
     this.constants = constants;
     driveTalon = new TalonFX(constants.driveMotorId(), DriveConstants.kCANBus);
@@ -167,17 +173,6 @@ public class ModuleIOTalonFX implements ModuleIO {
     var turnStatus =
         BaseStatusSignal.refreshAll(turnPosition, turnVelocity, turnAppliedVolts, turnCurrent);
 
-    if (turnTalon.hasResetOccurred()) {
-      DriverStation.reportWarning(
-          "Turn Falcon (CAN ID "
-              + constants.turnMotorId()
-              + ", drive CAN ID "
-              + constants.driveMotorId()
-              + ") reset detected; re-seeding turn position from analog encoder.",
-          false);
-      seedTurnPosition();
-    }
-
     inputs.driveConnected = driveConnectedDebounce.calculate(driveStatus.isOK());
     inputs.drivePositionRad = Units.rotationsToRadians(drivePosition.getValueAsDouble());
     inputs.driveVelocityRadPerSec = Units.rotationsToRadians(driveVelocity.getValueAsDouble());
@@ -192,6 +187,41 @@ public class ModuleIOTalonFX implements ModuleIO {
     inputs.turnEncoderConnected =
         turnEncoderConnectedDebounce.calculate(
             turnEncoderVoltage > 0.1 && turnEncoderVoltage < 4.9);
+
+    // Re-seed the turn Falcon's rotor position after a reset (e.g. brownout),
+    // since the reset discards the previously seeded position. Only trust the
+    // analog encoder's reading once it looks healthy again: a reset can
+    // coincide with a broader brownout that also disturbs the analog rail, so
+    // seeding from a momentarily bad reading would silently point the module
+    // at the wrong angle with no warning. If the encoder isn't healthy yet,
+    // defer and retry every cycle until inputs.turnEncoderConnected is true.
+    if (turnTalon.hasResetOccurred()) {
+      turnReseedPending = true;
+    }
+    if (turnReseedPending) {
+      if (inputs.turnEncoderConnected) {
+        DriverStation.reportWarning(
+            "Turn Falcon (CAN ID "
+                + constants.turnMotorId()
+                + ", drive CAN ID "
+                + constants.driveMotorId()
+                + ") reset detected; re-seeding turn position from analog encoder.",
+            false);
+        seedTurnPosition();
+        turnReseedPending = false;
+      } else {
+        DriverStation.reportWarning(
+            "Turn Falcon (CAN ID "
+                + constants.turnMotorId()
+                + ", drive CAN ID "
+                + constants.driveMotorId()
+                + ") reset detected, but analog encoder reads unhealthy (voltage "
+                + turnEncoderVoltage
+                + "V); deferring re-seed until it recovers.",
+            false);
+      }
+    }
+
     inputs.turnAbsolutePosition = new Rotation2d(turnEncoder.get());
     inputs.turnPosition = Rotation2d.fromRotations(turnPosition.getValueAsDouble());
     inputs.turnVelocityRadPerSec = Units.rotationsToRadians(turnVelocity.getValueAsDouble());
