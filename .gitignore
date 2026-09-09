@@ -1,4 +1,6 @@
-# Stock FRC 6413 con# EMACS backup and work files
+# Stock FRC 6413 gitignore contents
+
+# EMACS backup and work files
 *~
 \#*\#
 .#*
@@ -37,6 +39,9 @@ Temporary Items
 .claude/
 claude_config.json
 
+# Superpowers agent scratch workspace
+.superpowers/
+
 # UV package manager
 uv.lock
 .python-version
@@ -62,16 +67,13 @@ Logs/
 # Git worktrees
 .worktrees/
 
-# Superpowers agent scratch workspace
-.superpowers/
-
 # Credentials files contain API keys and DB connection strings - NEVER commit these.
 # credentials.py.example IS committed and serves as the template for each user to copy.
 credentials.py
 */credentials.py
 
 # This gitignore has been specially created by the WPILib team.
-# If you remove items from this file, intellisense might break.
+# If you remove items from this file, IntelliSense might break.
 
 ### C++ ###
 # Prerequisites
