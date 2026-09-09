@@ -62,6 +62,9 @@ Logs/
 # Git worktrees
 .worktrees/
 
+# Superpowers agent scratch workspace
+.superpowers/
+
 # Credentials files contain API keys and DB connection strings - NEVER commit these.
 # credentials.py.example IS committed and serves as the template for each user to copy.
 credentials.py
