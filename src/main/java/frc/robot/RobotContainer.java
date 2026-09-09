@@ -1,7 +1,7 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.DriveCommands;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveIO;
@@ -10,7 +10,9 @@ import frc.robot.subsystems.drive.DriveIOTalonFX;
 
 public class RobotContainer {
   private final Drive drive;
-  private final CommandXboxController controller = new CommandXboxController(0);
+  // private final CommandXboxController controller = new CommandXboxController(0);
+  private final GenericHID leftJoystick = new GenericHID(0);
+  private final GenericHID rightJoystick = new GenericHID(1);
 
   public RobotContainer() {
     switch (Constants.currentMode) {
@@ -33,9 +35,7 @@ public class RobotContainer {
   private void configureButtonBindings() {
     drive.setDefaultCommand(
         DriveCommands.tankDrive(
-            drive, () -> -controller.getLeftY(), () -> -controller.getRightY()));
-
-    controller.a().whileTrue(DriveCommands.testTurn(drive));
+            drive, () -> -leftJoystick.getRawAxis(1), () -> -rightJoystick.getRawAxis(1)));
   }
 
   public Command getAutonomousCommand() {
