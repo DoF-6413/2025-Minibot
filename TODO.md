@@ -4,7 +4,9 @@ This branch (`claude_swerve`) has a complete, working swerve drive
 implementation, but a few things were **placeholders** because nobody had
 measured the real robot yet, or because they can only be checked once the
 code is actually running on hardware. This file lists every one of those
-items, in the order you should do them, with step-by-step instructions.
+remaining items, in the order you should do them, with step-by-step
+instructions. (Completed items are removed from this file as they're
+finished, so everything here is still open.)
 
 You don't need to be an expert to do any of this. Just go in order, follow
 the steps, and ask a mentor if something doesn't match what's described
@@ -21,40 +23,13 @@ what we assumed, which is exactly the kind of thing this checklist is for).
 
 ---
 
-## Priority 1 — Do this before you connect to the robot at all
-
-### 1. Fix the team number
-
-**Why:** The code currently has the wrong team number in it. This won't
-stop the code from compiling, but it can stop your laptop from finding and
-connecting to the robot over the network, or cause you to accidentally
-connect to a different team's robot at a competition.
-
-**Steps:**
-1. Open the file `.wpilib/wpilib_preferences.json` (it's in the
-   `.wpilib` folder at the root of the project — in VS Code you may need
-   to show hidden files, or just use the file search: `Ctrl+P` then type
-   `wpilib_preferences.json`).
-2. You'll see a line like:
-   ```json
-   "teamNumber": 842
-   ```
-3. Change `842` to your actual FRC team number (this repo is named
-   `FRC_6413`, so it is very likely `6413` — but double check with a
-   mentor, don't just assume).
-4. Save the file. This is a config file, not Java code, so you don't need
-   to run `./gradlew build` for this one — but it's still a good habit to
-   run it anyway to make sure nothing else broke.
-
----
-
-## Priority 2 — Do this before you drive the robot for the first time
+## Priority 1 — Do this before you drive the robot for the first time
 
 Do these with the robot **up on blocks or a stand, wheels off the ground**,
 so that if a wheel spins the wrong way, it can't run into anything or hurt
 anyone.
 
-### 2. Check that every wheel drives the correct direction
+### 1. Check that every wheel drives the correct direction
 
 **Why:** This robot's code assumes that the left-side wheels (front-left
 and back-left) spin one way when driving "forward," and the right-side
@@ -94,7 +69,7 @@ the others when you try to drive straight.
    `DriveConstants.java`). This is a wiring/hardware problem, not something
    you fix by flipping a `true`/`false` in the code.
 
-### 3. Measure your robot's real dimensions and update the code
+### 2. Measure your robot's real dimensions and update the code
 
 **Why:** Nobody had exact measurements of the chassis when this code was
 written, so it currently uses a guess: "about 16 inches by 16 inches, with
@@ -140,13 +115,13 @@ needs automatically).
 
 ---
 
-## Priority 3 — Do this once the robot is driving safely, to make it drive its best
+## Priority 2 — Do this once the robot is driving safely, to make it drive its best
 
 These use built-in tools that are already wired into the code — you don't
 need to write any new code for these, you just need to run them from the
 driver station.
 
-### 4. Run the Wheel Radius Characterization routine
+### 3. Run the Wheel Radius Characterization routine
 
 **Why:** The code assumes your wheels are exactly 2 inches in radius
 (4 inches across). In reality, wheels wear down and are never perfectly
@@ -176,7 +151,7 @@ comparing what the wheels report to what the gyroscope reports.
    Replace `2.0` with the measured value in inches.
 6. Save, rebuild, redeploy.
 
-### 5. Run the Feedforward Characterization routine and set a safe max speed
+### 4. Run the Feedforward Characterization routine and set a safe max speed
 
 **Why:** The code currently calculates the robot's theoretical top speed
 using a math formula (motor speed ÷ gearing × wheel size), which assumes
@@ -216,7 +191,7 @@ the theoretical number as a safer, more honest max speed.
 7. Save, rebuild, redeploy, and confirm the robot still drives smoothly at
    full stick.
 
-### 6. Double-check the turn (steering) zero positions
+### 5. Double-check the turn (steering) zero positions
 
 **Why:** Each swerve module has a specific "zero" angle number in the code
 (one per wheel) that tells the robot "this is what straight-ahead looks
@@ -254,41 +229,12 @@ they've been used for real swerve steering, so it's worth double-checking.
 
 ---
 
-## Priority 4 — Optional improvements (nice to have, not urgent)
+## Priority 3 — Optional improvements (nice to have, not urgent)
 
 These don't need to be done before competing, but a mentor or a more
 experienced teammate may want to tackle them eventually.
 
-### 7. Add a "supply current limit" in addition to the existing limit
-
-**What it means:** The code currently limits how much current
-("stator current") each motor's internal windings can draw, which
-protects the motor itself. It does not separately limit how much current
-each motor pulls from the battery ("supply current"), which is what
-actually protects your circuit breakers on the robot. Adding a supply
-current limit is a common, extra layer of protection.
-**Where:** `src/main/java/frc/robot/subsystems/drive/ModuleIOTalonFX.java`,
-near the existing `driveConfig.CurrentLimits.StatorCurrentLimit` and
-`turnConfig.CurrentLimits.StatorCurrentLimit` lines — a mentor can show you
-the matching `SupplyCurrentLimit` fields on the same config objects.
-
-### 8. Double-check the swerve module type comment
-
-**What it means:** A comment in `DriveConstants.java` currently describes
-the swerve modules as "SDS MK3, L3-equivalent gearing." The gear ratio
-number itself (`6.122448979591837`) is correct and matches the real,
-working `TankDrive` code — only the descriptive words in the comment are
-unconfirmed. If you know for certain which exact swerve module your robot
-uses (ask a mentor or check the CAD/BOM), update the comment on this line
-to match:
-```java
-// Wheel / gearing (SDS MK3, L3-equivalent gearing; confirmed by the team and
-// matches the working TankDrive branch).
-```
-This is a documentation-only change — it doesn't affect how the robot
-drives.
-
-### 9. Protect against a rare number-overflow bug if a CANivore is ever added
+### 6. Protect against a rare number-overflow bug if a CANivore is ever added
 
 **What it means:** `GyroIONavX.java` has a line that converts the robot's
 sensor-update-rate number into a `byte` (a very small type of number that
@@ -306,7 +252,7 @@ CANivore is ever added. A mentor can help clamp the value or add a
 comment/assertion so it fails loudly instead of silently if this ever
 happens.
 
-### 10. Note on sensor "disconnected" detection timing
+### 7. Note on sensor "disconnected" detection timing
 
 **What it means:** When the drive or turn motor's connection is checked
 each cycle (`driveConnectedDebounce`/`turnConnectedDebounce` in

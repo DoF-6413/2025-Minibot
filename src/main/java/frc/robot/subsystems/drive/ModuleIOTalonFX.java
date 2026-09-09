@@ -105,6 +105,10 @@ public class ModuleIOTalonFX implements ModuleIO {
             .withKV(DriveConstants.kDriveV);
     driveConfig.CurrentLimits.StatorCurrentLimit = DriveConstants.kDriveCurrentLimitAmps;
     driveConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+    // Adjust DriveConstants.kDriveSupplyCurrentLimitAmps if breakers trip (lower it)
+    // or the drivetrain feels starved under load with no trips (raise it).
+    driveConfig.CurrentLimits.SupplyCurrentLimit = DriveConstants.kDriveSupplyCurrentLimitAmps;
+    driveConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
     tryUntilOk(5, () -> driveTalon.getConfigurator().apply(driveConfig, 0.25));
     tryUntilOk(5, () -> driveTalon.setPosition(0.0, 0.25));
 
@@ -125,6 +129,10 @@ public class ModuleIOTalonFX implements ModuleIO {
             .withKV(DriveConstants.kTurnV);
     turnConfig.CurrentLimits.StatorCurrentLimit = DriveConstants.kTurnCurrentLimitAmps;
     turnConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+    // Adjust DriveConstants.kTurnSupplyCurrentLimitAmps if breakers trip (lower it)
+    // or steering feels starved under load with no trips (raise it).
+    turnConfig.CurrentLimits.SupplyCurrentLimit = DriveConstants.kTurnSupplyCurrentLimitAmps;
+    turnConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
     tryUntilOk(5, () -> turnTalon.getConfigurator().apply(turnConfig, 0.25));
     // Seed the Falcon's internal rotor position from the analog encoder's
     // absolute reading (Research.md step 3).

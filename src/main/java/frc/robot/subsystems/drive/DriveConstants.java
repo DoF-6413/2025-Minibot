@@ -44,6 +44,16 @@ public final class DriveConstants {
   /** Turn motor stator current limit (amps). Safe default; retune after testing. */
   public static final double kTurnCurrentLimitAmps = 40.0;
 
+  // Supply current limits protect the breaker/battery circuit (separate from the
+  // stator limits above, which protect the motor windings). If breakers are
+  // tripping, lower these; if the drivetrain feels weak/starved under load and
+  // breakers aren't tripping, these can be raised.
+  /** Drive motor supply current limit (amps). Safe default; retune after testing. */
+  public static final double kDriveSupplyCurrentLimitAmps = 60.0;
+
+  /** Turn motor supply current limit (amps). Safe default; retune after testing. */
+  public static final double kTurnSupplyCurrentLimitAmps = 40.0;
+
   // Drive closed-loop gains (measured, from TankDrive).
   public static final double kDriveP = 0.1;
   public static final double kDriveI = 0.0;
