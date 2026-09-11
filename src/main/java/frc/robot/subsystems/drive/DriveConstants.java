@@ -23,12 +23,10 @@ public final class DriveConstants {
   public static final double kDriveGearRatio = 6.122448979591837;
   public static final double kTurnGearRatio = 12.8;
 
-  // Chassis geometry.
-  // TODO: verify on robot - measured as "about 16x16 with wheels about 11-12
-  // inches center to center" per team estimate on 2026-09-08. Replace with
-  // exact measurements before competition use.
-  private static final double kTrackWidthMeters = Units.inchesToMeters(11.5);
-  private static final double kWheelBaseMeters = Units.inchesToMeters(11.5);
+  // Chassis geometry. Swerve wheel centers are 11" apart in both directions
+  // (16" square frame), per exact team measurement.
+  private static final double kTrackWidthMeters = Units.inchesToMeters(11.0);
+  private static final double kWheelBaseMeters = Units.inchesToMeters(11.0);
   private static final double kHalfTrackWidthMeters = kTrackWidthMeters / 2.0;
   private static final double kHalfWheelBaseMeters = kWheelBaseMeters / 2.0;
 

@@ -69,50 +69,6 @@ the others when you try to drive straight.
    `DriveConstants.java`). This is a wiring/hardware problem, not something
    you fix by flipping a `true`/`false` in the code.
 
-### 2. Measure your robot's real dimensions and update the code
-
-**Why:** Nobody had exact measurements of the chassis when this code was
-written, so it currently uses a guess: "about 16 inches by 16 inches, with
-wheels about 11.5 inches apart, center-to-center." This guess is used to
-calculate how the robot turns, so if it's wrong, the robot's rotation will
-be slightly (or not-so-slightly) off — for example, telling it to spin in
-place might make it actually drive in a small circle instead.
-
-**What to measure:** You need the straight-line distance **between the
-centers of the wheels**, not the edge of the robot frame. Specifically:
-- **Wheelbase**: the distance from a front wheel's center to the back
-  wheel's center on the same side (front-left to back-left, for example).
-- **Track width**: the distance from a left wheel's center to the right
-  wheel's center on the same end (front-left to front-right, for example).
-
-A tape measure and a helper make this much easier — measure twice to be
-sure, and measure in inches (the code converts inches to the units it
-needs automatically).
-
-**Steps:**
-1. Open `src/main/java/frc/robot/subsystems/drive/DriveConstants.java`.
-2. Find these two lines (near the top, under the comment
-   `// Chassis geometry.`):
-   ```java
-   private static final double kTrackWidthMeters = Units.inchesToMeters(11.5);
-   private static final double kWheelBaseMeters = Units.inchesToMeters(11.5);
-   ```
-3. Replace the `11.5` in each line with your real measurements, in inches.
-   For example, if you measured a 24-inch wheelbase and a 22-inch track
-   width, it should look like:
-   ```java
-   private static final double kTrackWidthMeters = Units.inchesToMeters(22.0);
-   private static final double kWheelBaseMeters = Units.inchesToMeters(24.0);
-   ```
-   You do **not** need to touch anything else in the file — every other
-   constant (like each wheel's exact X/Y position) is calculated
-   automatically from these two numbers.
-4. Once you're confident in these measurements, also delete the `// TODO:
-   verify on robot` comment directly above these two lines (lines 27-29),
-   since it will no longer be a placeholder. Leave the rest of that
-   paragraph's comment alone.
-5. Save, rebuild, redeploy.
-
 ---
 
 ## Priority 2 — Do this once the robot is driving safely, to make it drive its best
@@ -121,7 +77,7 @@ These use built-in tools that are already wired into the code — you don't
 need to write any new code for these, you just need to run them from the
 driver station.
 
-### 3. Run the Wheel Radius Characterization routine
+### 2. Run the Wheel Radius Characterization routine
 
 **Why:** The code assumes your wheels are exactly 2 inches in radius
 (4 inches across). In reality, wheels wear down and are never perfectly
@@ -151,7 +107,7 @@ comparing what the wheels report to what the gyroscope reports.
    Replace `2.0` with the measured value in inches.
 6. Save, rebuild, redeploy.
 
-### 4. Run the Feedforward Characterization routine and set a safe max speed
+### 3. Run the Feedforward Characterization routine and set a safe max speed
 
 **Why:** The code currently calculates the robot's theoretical top speed
 using a math formula (motor speed ÷ gearing × wheel size), which assumes
@@ -191,7 +147,7 @@ the theoretical number as a safer, more honest max speed.
 7. Save, rebuild, redeploy, and confirm the robot still drives smoothly at
    full stick.
 
-### 5. Double-check the turn (steering) zero positions
+### 4. Double-check the turn (steering) zero positions
 
 **Why:** Each swerve module has a specific "zero" angle number in the code
 (one per wheel) that tells the robot "this is what straight-ahead looks
@@ -234,7 +190,7 @@ they've been used for real swerve steering, so it's worth double-checking.
 These don't need to be done before competing, but a mentor or a more
 experienced teammate may want to tackle them eventually.
 
-### 6. Protect against a rare number-overflow bug if a CANivore is ever added
+### 5. Protect against a rare number-overflow bug if a CANivore is ever added
 
 **What it means:** `GyroIONavX.java` has a line that converts the robot's
 sensor-update-rate number into a `byte` (a very small type of number that
@@ -252,7 +208,7 @@ CANivore is ever added. A mentor can help clamp the value or add a
 comment/assertion so it fails loudly instead of silently if this ever
 happens.
 
-### 7. Note on sensor "disconnected" detection timing
+### 6. Note on sensor "disconnected" detection timing
 
 **What it means:** When the drive or turn motor's connection is checked
 each cycle (`driveConnectedDebounce`/`turnConnectedDebounce` in
