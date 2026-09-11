@@ -30,6 +30,14 @@ public class RobotContainer {
   private final LoggedDashboardChooser<Command> autoChooser =
       new LoggedDashboardChooser<>("Auto Choices");
 
+  /**
+   * Outreach/demo speed cap, as a fraction of the drivetrain's theoretical max speed. Kept
+   * conservative (nothing above 70%) since this robot is driven around the public. Read once at the
+   * start of autonomous/teleop, not every periodic cycle.
+   */
+  private final LoggedDashboardChooser<Double> speedLimitChooser =
+      new LoggedDashboardChooser<>("Speed Limit");
+
   public RobotContainer() {
     switch (Constants.currentMode) {
       case REAL:
@@ -64,6 +72,12 @@ public class RobotContainer {
                 new ModuleIO() {});
         break;
     }
+
+    speedLimitChooser.addOption("30%", 0.3);
+    speedLimitChooser.addOption("40%", 0.4);
+    speedLimitChooser.addDefaultOption("50%", 0.5);
+    speedLimitChooser.addOption("60%", 0.6);
+    speedLimitChooser.addOption("70%", 0.7);
 
     autoChooser.addDefaultOption("None", Commands.none());
     autoChooser.addOption(
@@ -120,5 +134,13 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     return autoChooser.get();
+  }
+
+  /**
+   * Applies the dashboard-selected speed limit to the drivetrain. Call once at the start of
+   * autonomous/teleop so the limit can be changed between matches without redeploying code.
+   */
+  public void updateSpeedLimit() {
+    drive.setSpeedLimitPercent(speedLimitChooser.get());
   }
 }

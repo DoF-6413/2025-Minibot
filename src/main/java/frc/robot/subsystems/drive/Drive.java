@@ -9,6 +9,7 @@ package frc.robot.subsystems.drive;
 
 import static edu.wpi.first.units.Units.Volts;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -71,6 +72,12 @@ public class Drive extends SubsystemBase {
       };
   private final SwerveDrivePoseEstimator poseEstimator =
       new SwerveDrivePoseEstimator(kinematics, rawGyroRotation, lastModulePositions, Pose2d.kZero);
+
+  /** Default speed limit for this outreach robot until a mode-init sets it from the dashboard. */
+  private static final double DEFAULT_SPEED_LIMIT_PERCENT = 0.5;
+
+  private double maxLinearSpeedMetersPerSec =
+      DriveConstants.kMaxLinearSpeedMetersPerSec * DEFAULT_SPEED_LIMIT_PERCENT;
 
   public Drive(
       GyroIO gyroIO,
@@ -146,8 +153,7 @@ public class Drive extends SubsystemBase {
   public void runVelocity(ChassisSpeeds speeds) {
     ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(speeds, 0.02);
     SwerveModuleState[] setpointStates = kinematics.toSwerveModuleStates(discreteSpeeds);
-    SwerveDriveKinematics.desaturateWheelSpeeds(
-        setpointStates, DriveConstants.kMaxLinearSpeedMetersPerSec);
+    SwerveDriveKinematics.desaturateWheelSpeeds(setpointStates, maxLinearSpeedMetersPerSec);
 
     Logger.recordOutput("SwerveStates/Setpoints", setpointStates);
     Logger.recordOutput("SwerveChassisSpeeds/Setpoints", discreteSpeeds);
@@ -248,7 +254,17 @@ public class Drive extends SubsystemBase {
   }
 
   public double getMaxLinearSpeedMetersPerSec() {
-    return DriveConstants.kMaxLinearSpeedMetersPerSec;
+    return maxLinearSpeedMetersPerSec;
+  }
+
+  /**
+   * Sets the fraction of the theoretical max speed the robot is allowed to drive at (e.g. 0.5 for
+   * 50%), clamped to [0, 1]. Intended to be read from a dashboard chooser once at the start of
+   * autonomous/teleop, not every periodic cycle.
+   */
+  public void setSpeedLimitPercent(double percent) {
+    maxLinearSpeedMetersPerSec =
+        DriveConstants.kMaxLinearSpeedMetersPerSec * MathUtil.clamp(percent, 0.0, 1.0);
   }
 
   public double getMaxAngularSpeedRadPerSec() {
