@@ -147,6 +147,14 @@ the theoretical number as a safer, more honest max speed.
 7. Save, rebuild, redeploy, and confirm the robot still drives smoothly at
    full stick.
 
+**Note:** This is separate from the dashboard "Speed Limit" chooser
+(30/40/50/60/70%, default 50%) added in `RobotContainer.java` for safe
+outreach/demo driving around the public — that chooser scales *this*
+`kMaxLinearSpeedMetersPerSec` value down further, without needing a
+redeploy. Set `kMaxLinearSpeedMetersPerSec` to the robot's real honest top
+speed here; use the dashboard chooser at event time to pick how much of
+that speed is safe to expose to a driver that day.
+
 ### 4. Double-check the turn (steering) zero positions
 
 **Why:** Each swerve module has a specific "zero" angle number in the code
