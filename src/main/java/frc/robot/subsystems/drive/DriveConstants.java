@@ -66,15 +66,18 @@ public final class DriveConstants {
   public static final double kTurnS = 0.0;
   public static final double kTurnV = 0.124;
 
-  /** All four turn motors are wired Clockwise_Positive (measured, from TankDrive). */
-  public static final boolean kTurnMotorInverted = true;
+  /**
+   * Turn motors are CounterClockwise_Positive so rotor position matches the analog encoder seed and
+   * WPILib's CCW-positive convention. The old TankDrive value (true) mirrored module angles, which
+   * turned spin-in-place tangent angles into radial ones (X pattern).
+   */
+  public static final boolean kTurnMotorInverted = false;
 
-  // Drive motor inversion follows the left/right convention measured on
-  // TankDrive (left side normal, right side inverted).
-  // TODO: verify on robot - TankDrive only ever ran these as CAN-follower
-  // pairs, never as 4 independent motors; confirm no module fights itself.
-  private static final boolean kLeftDriveInverted = false;
-  private static final boolean kRightDriveInverted = true;
+  // Drive motor inversion. The TankDrive values (left false, right true) made
+  // the robot drive backward on the swerve chassis, so both sides are flipped.
+  // TODO: verify on robot - confirm all four wheels drive forward together.
+  private static final boolean kLeftDriveInverted = true;
+  private static final boolean kRightDriveInverted = false;
 
   /** Per-corner constants: CAN IDs, encoder port/offset, inversion, and kinematic position. */
   public record ModuleConstants(
